@@ -1,1 +1,2 @@
-timestamp	commit_hash	experiment_id	primary_metric	status	notes
+commit_hash	metric	vram	status	description
+6669f2319c21faabfcfce6cac61d25815e725776	0.0	0	KEEP	train stub 
