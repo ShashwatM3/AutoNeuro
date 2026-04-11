@@ -5,4 +5,21 @@ description = "Generalized AutoResearch-style multi-agent ML pipeline (skeleton)
 readme = "program.md"
 requires-python = ">=3.10"
 
-# [tool] — dependencies and tool configs will be added here later.
+dependencies = [
+    "torch>=2.2.0",
+    "torch-geometric>=2.5.0",
+    "torch-scatter>=2.1.2",
+    "torch-sparse>=0.6.18",
+    "nilearn>=0.10.4",
+    "mne>=1.6.0",
+    "enigmatoolbox>=2.0.0",
+    "scipy>=1.12.0",
+    "numpy>=1.26.0",
+    "pandas>=2.1.0",
+    "scikit-learn>=1.4.0",
+    "nibabel>=5.2.0",
+    "h5py>=3.10.0",
+    "librosa>=0.10.1",
+    "torchaudio>=2.2.0",
+    "torchvision>=0.17.0",
+]
