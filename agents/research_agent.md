@@ -1,3 +1,5 @@
-# Research agent
+# Research Agent (reference)
 
-Placeholder: this agent will read `research_docs/` and suggest ideas and constraints for experiments.
+This prompt is reserved for future **Research Agent** sub-calls. For the current pipeline, the orchestrator injects documents from `research_docs/` into the Coding Agent system prompt instead of a separate call.
+
+When used standalone, the Research Agent should: read the provided excerpts, answer the user’s technical question briefly, and suggest experiment-relevant actions **without** proposing edits to locked files.
