@@ -4,5 +4,9 @@ version = "0.0.0"
 description = "Generalized AutoResearch-style multi-agent ML pipeline (skeleton)."
 readme = "program.md"
 requires-python = ">=3.10"
+dependencies = [
+    "flask",
+    "anthropic", 
+]
 
 # [tool] — dependencies and tool configs will be added here later.
