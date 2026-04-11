@@ -1,0 +1,85 @@
+AutoNeuro — SQLite schema (database.db)
+========================================
+
+Location: repository root, path `database.db` (same directory as
+`orchestrator.py`). The dashboard and `agents/contact_agent.py` both use
+this file.
+
+There is no database file checked into the tree by default. SQLite creates
+`database.db` on first open that performs writes. Until then, the dashboard
+API may return errors or empty sets depending on how the connection is used.
+
+The CREATE TABLE statements below are the canonical schema inferred from
+`write_run_to_db`, `write_flag_to_db`, and the dashboard SELECT/UPDATE
+queries. Apply them once (e.g. `sqlite3 database.db < schema.sql`) before
+inserting rows if you are bootstrapping manually.
+
+
+Table: runs
+-----------
+Experiment iterations: commit, status, metric, diff, optional error log.
+
+  id               INTEGER PRIMARY KEY AUTOINCREMENT
+  iteration        INTEGER NOT NULL
+  commit_hash      TEXT NOT NULL
+  status           TEXT NOT NULL          -- e.g. KEEP, DISCARD, CRASH
+  metric_value     REAL NOT NULL
+  diff               TEXT NOT NULL        -- code / change summary
+  error_log        TEXT                   -- stderr or NULL
+  timestamp        TEXT NOT NULL          -- ISO-8601 (UTC) from Python
+
+Suggested indexes (optional):
+
+  CREATE INDEX IF NOT EXISTS idx_runs_iteration ON runs (iteration DESC);
+
+
+Table: flags
+------------
+Human-in-the-loop flags from the contact agent.
+
+  id                   INTEGER PRIMARY KEY AUTOINCREMENT
+  iteration            INTEGER NOT NULL
+  trigger_reason       TEXT NOT NULL      -- e.g. ERROR_LIMIT, plateau labels
+  context_summary      TEXT NOT NULL      -- agent summary text
+  human_instruction    TEXT               -- set by dashboard / NULL until reply
+  resolved             INTEGER NOT NULL   -- 0 = open, 1 = resolved (SQLite boolean)
+  timestamp            TEXT NOT NULL      -- ISO-8601 (UTC)
+
+Suggested indexes (optional):
+
+  CREATE INDEX IF NOT EXISTS idx_flags_timestamp ON flags (timestamp DESC);
+
+
+Executable DDL (copy-paste)
+-----------------------------
+
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS runs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    iteration INTEGER NOT NULL,
+    commit_hash TEXT NOT NULL,
+    status TEXT NOT NULL,
+    metric_value REAL NOT NULL,
+    diff TEXT NOT NULL,
+    error_log TEXT,
+    timestamp TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS flags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    iteration INTEGER NOT NULL,
+    trigger_reason TEXT NOT NULL,
+    context_summary TEXT NOT NULL,
+    human_instruction TEXT,
+    resolved INTEGER NOT NULL DEFAULT 0,
+    timestamp TEXT NOT NULL
+);
+
+COMMIT;
+
+
+References in code
+------------------
+  agents/contact_agent.py   — INSERT INTO runs / flags
+  dashboard/server.py       — SELECT and UPDATE on flags; SELECT on runs

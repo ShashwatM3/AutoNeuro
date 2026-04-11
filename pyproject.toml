@@ -6,7 +6,7 @@ readme = "program.md"
 requires-python = ">=3.10"
 dependencies = [
     "flask",
-    "anthropic", 
+    "flask-cors",
+    "openai>=1.0.0",
+    "python-dotenv",
 ]
-
-# [tool] — dependencies and tool configs will be added here later.

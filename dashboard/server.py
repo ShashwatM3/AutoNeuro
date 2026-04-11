@@ -1,29 +1,33 @@
 #!/usr/bin/env python3
 """
 Flask backend server for AutoNeuro dashboard.
-Serves experiment runs and flags management pages with API endpoints.
+Serves the Runs and Flags pages plus JSON API routes for the same data.
 """
 
 import json
 import sqlite3
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
-# Add the parent directory to Python path to import contact_agent
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.contact_agent import escalate, generate_summary
+# Add the parent directory to Python path to import contact_agent and db
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from agents.contact_agent import generate_summary
+from db import init_db
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for local development
 
 # Database path - one level up from dashboard directory
-DB_PATH = Path(__file__).parent.parent / "database.db"
-HUMAN_INSTRUCTION_PATH = Path(__file__).parent.parent / "HUMAN_INSTRUCTION.txt"
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(_REPO_ROOT / ".env")
+
+DB_PATH = _REPO_ROOT / "database.db"
+HUMAN_INSTRUCTION_PATH = _REPO_ROOT / "HUMAN_INSTRUCTION.txt"
 
 
 def get_db_connection():
@@ -42,7 +46,7 @@ def index():
 
 @app.route('/flags')
 def flags():
-    """Serve the flags management page."""
+    """Serve the Flags page (flags.html)."""
     return send_from_directory('.', 'flags.html')
 
 
@@ -266,13 +270,7 @@ def summarize_flag(flag_id):
 
 
 if __name__ == '__main__':
+    init_db()
     print(f"Database path: {DB_PATH}")
     print(f"Human instruction file: {HUMAN_INSTRUCTION_PATH}")
-    
-    # Check if database exists
-    if not DB_PATH.exists():
-        print(f"WARNING: Database file not found at {DB_PATH}")
-        print("Make sure you've created the database with the proper schema.")
-    
-    # Start the Flask development server
     app.run(host='0.0.0.0', port=5000, debug=True)

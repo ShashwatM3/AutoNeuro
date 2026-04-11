@@ -3,8 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoNeuro - Flags Management</title>
+    <title>Flags · AutoNeuro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-page: #f4f4f4;
+            --bg-surface: #ffffff;
+            --border-subtle: #e0e0e0;
+            --border-strong: #c6c6c6;
+            --text-primary: #161616;
+            --text-secondary: #525252;
+            --text-helper: #6f6f6f;
+            --interactive: #0f62fe;
+            --interactive-hover: #0043ce;
+            --flag-pending-accent: #fa4d56;
+            --flag-resolved-accent: #6fdc8c;
+            --tag-pending-bg: #fff1f1;
+            --tag-pending-text: #750e13;
+            --tag-pending-border: #fa4d56;
+            --tag-resolved-bg: #defbe6;
+            --tag-resolved-text: #0e6027;
+            --tag-resolved-border: #6fdc8c;
+            --header-height: 3rem;
+            --max-content: 99rem;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,575 +42,666 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #2c3e50;
-            line-height: 1.6;
+            font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.375;
+            color: var(--text-primary);
+            background: var(--bg-page);
+            min-height: 100vh;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .shell-header {
+            height: var(--header-height);
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
-            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        .shell-header__brand {
+            display: flex;
             align-items: center;
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
+            padding: 0 var(--spacing-md);
+            border-right: 1px solid var(--border-subtle);
             font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.01em;
+            color: var(--text-primary);
+            white-space: nowrap;
         }
 
-        .nav {
+        .shell-header__brand span {
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-left: var(--spacing-sm);
+        }
+
+        .shell-nav {
             display: flex;
-            gap: 1rem;
+            align-items: stretch;
         }
 
-        .nav a {
-            color: white;
+        .shell-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-lg);
+            color: var(--text-secondary);
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .nav a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav a.active {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .page-title {
-            margin-bottom: 2rem;
-        }
-
-        .page-title h2 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-title p {
-            color: #7f8c8d;
-        }
-
-        .flags-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-        }
-
-        .flag-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #e67e22;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .flag-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .flag-card.resolved {
-            border-left-color: #27ae60;
-            opacity: 0.8;
-        }
-
-        .flag-card.pending {
-            border-left-color: #e74c3c;
-        }
-
-        .flag-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .flag-iteration {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .flag-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8125rem;
             font-weight: 500;
-            text-transform: uppercase;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
         }
 
-        .flag-status.resolved {
-            background-color: #d4edda;
-            color: #155724;
+        .shell-nav a:hover {
+            background: var(--bg-page);
+            color: var(--text-primary);
         }
 
-        .flag-status.pending {
-            background-color: #f8d7da;
-            color: #721c24;
+        .shell-nav a.is-active {
+            color: var(--text-primary);
+            border-bottom-color: var(--interactive);
         }
 
-        .flag-details {
-            margin-bottom: 1.5rem;
+        .layout {
+            max-width: var(--max-content);
+            margin: 0 auto;
+            padding: var(--spacing-lg) var(--spacing-xl);
         }
 
-        .flag-detail {
-            margin-bottom: 1rem;
-        }
-
-        .flag-detail .label {
-            font-weight: 600;
-            color: #7f8c8d;
-            margin-bottom: 0.25rem;
-            display: block;
-        }
-
-        .flag-detail .value {
-            color: #2c3e50;
-            background-color: #f8f9fa;
-            padding: 0.5rem;
-            border-radius: 4px;
-            word-wrap: break-word;
-        }
-
-        .trigger-reason {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: white;
-        }
-
-        .trigger-reason.error-limit {
-            background-color: #e74c3c;
-        }
-
-        .trigger-reason.plateau {
-            background-color: #f39c12;
-        }
-
-        .timestamp {
-            color: #95a5a6;
-            font-size: 0.85rem;
-        }
-
-        .flag-actions {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid #ecf0f1;
-        }
-
-        .response-form {
-            margin-bottom: 1rem;
-        }
-
-        .response-textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 0.75rem;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            resize: vertical;
-            transition: border-color 0.3s;
-        }
-
-        .response-textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .action-buttons {
+        .page-header {
             display: flex;
-            gap: 0.75rem;
             flex-wrap: wrap;
-            margin-top: 0.75rem;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .page-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .page-header p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+            max-width: 40rem;
+        }
+
+        .meta-bar {
+            font-size: 0.75rem;
+            color: var(--text-helper);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .toast-stack {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .toast {
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: 0.8125rem;
+            border: 1px solid var(--border-strong);
+            margin-bottom: var(--spacing-sm);
+            background: var(--bg-surface);
+        }
+
+        .toast--success {
+            border-color: #6fdc8c;
+            background: #defbe6;
+        }
+
+        .toast--error {
+            border-color: #fa4d56;
+            background: #fff1f1;
+        }
+
+        .flag-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .flag-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--border-strong);
+        }
+
+        .flag-panel--pending {
+            border-top-color: var(--flag-pending-accent);
+        }
+
+        .flag-panel--resolved {
+            border-top-color: var(--flag-resolved-accent);
+        }
+
+        .flag-panel__head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-page);
+            cursor: pointer;
+            user-select: none;
+            text-align: left;
+            width: 100%;
+            font: inherit;
+            color: inherit;
+        }
+
+        .flag-panel__head:focus {
+            outline: 2px solid var(--interactive);
+            outline-offset: -2px;
+        }
+
+        .flag-panel__head-inner {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flag-chev {
+            display: inline-block;
+            width: 1rem;
+            flex-shrink: 0;
+            color: var(--text-helper);
+            transition: transform 0.15s ease;
+            margin-top: 0.125rem;
+        }
+
+        .flag-panel.is-expanded .flag-chev {
+            transform: rotate(90deg);
+            color: var(--interactive);
+        }
+
+        .flag-panel__title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+        }
+
+        .flag-panel__subtitle {
+            font-size: 0.75rem;
+            color: var(--text-helper);
+            margin-top: var(--spacing-xs);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .state-pill {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.625rem;
+            border: 1px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .state-pill--pending {
+            background: var(--tag-pending-bg);
+            color: var(--tag-pending-text);
+            border-color: var(--tag-pending-border);
+        }
+
+        .state-pill--resolved {
+            background: var(--tag-resolved-bg);
+            color: var(--tag-resolved-text);
+            border-color: var(--tag-resolved-border);
+        }
+
+        .flag-panel__collapse {
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .flag-panel__body {
+            padding: var(--spacing-lg);
+        }
+
+        .dl-grid {
+            display: grid;
+            grid-template-columns: 8rem 1fr;
+            gap: var(--spacing-sm) var(--spacing-lg);
+            font-size: 0.8125rem;
+        }
+
+        @media (max-width: 40rem) {
+            .dl-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dl-grid dt {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            padding-top: 0.125rem;
+        }
+
+        .dl-grid dd {
+            margin: 0;
+            word-break: break-word;
+        }
+
+        .reason-chip {
+            display: inline-block;
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 0.6875rem;
+            padding: 0.125rem 0.5rem;
+            border: 1px solid var(--border-strong);
+            background: var(--bg-page);
+            text-transform: lowercase;
+        }
+
+        .prose-block {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-page);
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+
+        .instruction-block {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            border: 1px solid #6fdc8c;
+            background: #defbe6;
+            font-size: 0.8125rem;
+        }
+
+        .instruction-block .label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--tag-resolved-text);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .flag-panel__actions {
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .field-label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 6.5rem;
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-family: "IBM Plex Sans", system-ui, sans-serif;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            border: 1px solid var(--border-strong);
+            background: var(--bg-surface);
+            resize: vertical;
+        }
+
+        .textarea:focus {
+            outline: 2px solid var(--interactive);
+            outline-offset: 1px;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
         }
 
         .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.9rem;
+            font-family: inherit;
+            font-size: 0.8125rem;
             font-weight: 500;
+            padding: 0.5625rem 1rem;
+            border: 1px solid transparent;
             cursor: pointer;
-            transition: all 0.3s;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.5rem;
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .btn-primary {
-            background-color: #3498db;
-            color: white;
+        .btn--primary {
+            background: var(--interactive);
+            color: #fff;
         }
 
-        .btn-primary:hover:not(:disabled) {
-            background-color: #2980b9;
+        .btn--primary:hover:not(:disabled) {
+            background: var(--interactive-hover);
         }
 
-        .btn-success {
-            background-color: #27ae60;
-            color: white;
+        .btn--secondary {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border-color: var(--interactive);
         }
 
-        .btn-success:hover:not(:disabled) {
-            background-color: #229954;
+        .btn--secondary:hover:not(:disabled) {
+            background: #e5f6ff;
         }
 
-        .btn-warning {
-            background-color: #f39c12;
-            color: white;
+        .btn--tertiary {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-strong);
         }
 
-        .btn-warning:hover:not(:disabled) {
-            background-color: #e67e22;
+        .btn--tertiary:hover:not(:disabled) {
+            background: var(--bg-page);
         }
 
-        .btn-secondary {
-            background-color: #95a5a6;
-            color: white;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background-color: #7f8c8d;
-        }
-
-        .loading {
+        .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: #7f8c8d;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            border: 1px dashed var(--border-strong);
+            background: var(--bg-surface);
         }
 
-        .error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 2rem 0;
-            color: #721c24;
+        .empty-state h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
         }
 
-        .success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 1rem 0;
-            color: #155724;
+        .empty-state p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            max-width: 28rem;
+            margin: 0 auto;
         }
 
-        .auto-refresh {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background-color: #3498db;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        .inline-error {
+            padding: var(--spacing-md);
+            border: 1px solid #fa4d56;
+            background: #fff1f1;
+            font-size: 0.8125rem;
         }
 
-        .no-flags {
-            text-align: center;
-            padding: 3rem;
-            color: #7f8c8d;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .human-instruction {
-            background-color: #e8f5e8;
-            border-left: 4px solid #27ae60;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
-            border-radius: 4px;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            .flags-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .container {
-                padding: 0 1rem;
+        @media (max-width: 48rem) {
+            .layout {
+                padding: var(--spacing-md);
             }
 
-            .action-buttons {
-                flex-direction: column;
+            .shell-header {
+                flex-wrap: wrap;
+                height: auto;
             }
 
-            .btn {
+            .shell-header__brand {
+                border-right: none;
+                flex: 1 1 100%;
+                border-bottom: 1px solid var(--border-subtle);
+            }
+
+            .shell-nav {
                 width: 100%;
-                text-align: center;
+            }
+
+            .shell-nav a {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .btn-row .btn {
+                flex: 1 1 auto;
+                min-width: calc(50% - var(--spacing-sm));
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <h1>🧠 AutoNeuro Dashboard</h1>
-            <nav class="nav">
-                <a href="/">Experiment Runs</a>
-                <a href="/flags" class="active">Flags</a>
-            </nav>
-        </div>
+    <header class="shell-header">
+        <div class="shell-header__brand">AutoNeuro <span>Operations</span></div>
+        <nav class="shell-nav" aria-label="Primary">
+            <a href="/">Runs</a>
+            <a href="/flags" class="is-active">Flags</a>
+        </nav>
     </header>
 
-    <div class="container">
-        <div class="page-title">
-            <h2>Flags Management</h2>
-            <p>Human-in-the-loop escalations requiring attention and guidance</p>
+    <main class="layout">
+        <div class="page-header">
+            <div>
+                <h1>Flags</h1>
+                <p>Contact-agent flags from the database. Click a flag header to show context and actions. Submitting a response writes the instruction file for the orchestrator.</p>
+            </div>
+            <div class="meta-bar" id="refreshStatus" aria-live="polite">Loading…</div>
         </div>
 
-        <div class="auto-refresh" id="refreshStatus">
-            Auto-refresh: ON
-        </div>
+        <div class="toast-stack" id="toastRoot" aria-live="polite"></div>
 
         <div id="content">
-            <div class="loading">Loading flags...</div>
+            <div class="empty-state" style="border-style: solid;">
+                <p>Loading flags…</p>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script>
         let refreshInterval;
-        const REFRESH_INTERVAL = 30000; // 30 seconds
+        const REFRESH_INTERVAL = 30000;
 
-        // Utility functions
         function formatTimestamp(timestamp) {
-            if (!timestamp) return 'N/A';
-            const date = new Date(timestamp);
-            return date.toLocaleString();
+            if (!timestamp) return '—';
+            return new Date(timestamp).toLocaleString(undefined, {
+                year: 'numeric', month: 'short', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
         }
 
         function formatTriggerReason(reason) {
-            return reason ? reason.replace('_', ' ').toLowerCase() : 'unknown';
+            if (!reason) return 'unknown';
+            return String(reason).replace(/_/g, ' ');
         }
 
-        // API helpers
-        async function makeRequest(url, options = {}) {
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    ...options
-                });
+        function escHtml(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
 
-                if (!response.ok) {
-                    const error = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
-                    throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
-                }
+        async function makeRequest(url, options) {
+            options = options || {};
+            const response = await fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(options.headers || {})
+                },
+                ...options
+            });
 
-                return await response.json();
-            } catch (error) {
-                console.error('API request failed:', error);
-                throw error;
+            if (!response.ok) {
+                const error = await response.json().catch(function () { return { error: 'HTTP ' + response.status }; });
+                throw new Error(error.error || ('HTTP ' + response.status + ': ' + response.statusText));
             }
+
+            return await response.json();
         }
 
-        // Actions
+        function showMessage(message, type) {
+            const root = document.getElementById('toastRoot');
+            const el = document.createElement('div');
+            el.className = 'toast ' + (type === 'success' ? 'toast--success' : 'toast--error');
+            el.textContent = message;
+            root.appendChild(el);
+            setTimeout(function () { el.remove(); }, 5000);
+        }
+
+        function toggleFlagCollapse(header) {
+            const panel = header.closest('.flag-panel');
+            const id = header.getAttribute('aria-controls');
+            if (!panel || !id) return;
+            const body = document.getElementById(id);
+            if (!body) return;
+            body.hidden = !body.hidden;
+            const open = !body.hidden;
+            panel.classList.toggle('is-expanded', open);
+            header.setAttribute('aria-expanded', String(open));
+        }
+
+        function bindFlagPanels(root) {
+            root.addEventListener('click', function (e) {
+                const header = e.target.closest('.flag-panel__head');
+                if (!header || !root.contains(header)) return;
+                toggleFlagCollapse(header);
+            });
+            root.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                const header = e.target.closest('.flag-panel__head');
+                if (!header || !root.contains(header)) return;
+                e.preventDefault();
+                toggleFlagCollapse(header);
+            });
+        }
+
         async function respondToFlag(flagId, instruction) {
-            const data = await makeRequest(`/api/flags/${flagId}/respond`, {
+            const data = await makeRequest('/api/flags/' + flagId + '/respond', {
                 method: 'POST',
                 body: JSON.stringify({ human_instruction: instruction })
             });
-
             showMessage(data.message, 'success');
-            setTimeout(fetchFlags, 1000); // Refresh after 1 second
+            setTimeout(fetchFlags, 800);
         }
 
         async function resolveFlag(flagId) {
-            const data = await makeRequest(`/api/flags/${flagId}/resolve`, {
+            const data = await makeRequest('/api/flags/' + flagId + '/resolve', {
                 method: 'POST'
             });
-
             showMessage(data.message, 'success');
-            setTimeout(fetchFlags, 1000);
+            setTimeout(fetchFlags, 800);
         }
 
         async function summarizeFlag(flagId) {
-            const button = document.querySelector(`#summarize-${flagId}`);
+            const button = document.querySelector('#summarize-' + flagId);
+            const panel = document.querySelector('article[data-flag-id="' + flagId + '"]');
+            const isResolved = panel && panel.classList.contains('flag-panel--resolved');
+            const labelIdle = isResolved ? 'Regenerate summary' : 'Generate summary';
             if (button) {
                 button.disabled = true;
-                button.textContent = 'Generating...';
+                button.textContent = 'Working…';
             }
-
             try {
-                const data = await makeRequest(`/api/flags/${flagId}/summarize`, {
+                const data = await makeRequest('/api/flags/' + flagId + '/summarize', {
                     method: 'POST'
                 });
-
                 showMessage(data.message, 'success');
-                setTimeout(fetchFlags, 1000);
+                setTimeout(fetchFlags, 800);
             } finally {
                 if (button) {
                     button.disabled = false;
-                    button.textContent = 'AI Summarize';
+                    button.textContent = labelIdle;
                 }
             }
         }
 
-        // Show temporary messages
-        function showMessage(message, type = 'info') {
-            const existingMessage = document.querySelector('.message');
-            if (existingMessage) existingMessage.remove();
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.textContent = message;
-
-            const container = document.querySelector('.container');
-            container.insertBefore(messageDiv, container.firstChild.nextSibling);
-
-            setTimeout(() => messageDiv.remove(), 5000);
-        }
-
-        // Create flag card HTML
-        function createFlagCard(flag) {
+        function createFlagPanel(flag) {
             const isResolved = flag.resolved;
-            const statusClass = isResolved ? 'resolved' : 'pending';
-            const triggerClass = formatTriggerReason(flag.trigger_reason).replace(' ', '-');
+            const panelMod = isResolved ? 'flag-panel--resolved' : 'flag-panel--pending';
+            const pillMod = isResolved ? 'state-pill--resolved' : 'state-pill--pending';
+            const pillText = isResolved ? 'Resolved' : 'Pending';
+            const triggerDisplay = formatTriggerReason(flag.trigger_reason);
+            const triggerSlug = triggerDisplay.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+            const collapseId = 'flag-collapse-' + flag.id;
 
-            return `
-                <div class="flag-card ${statusClass}">
-                    <div class="flag-header">
-                        <div class="flag-iteration">Flag #${flag.id} - Iteration ${flag.iteration}</div>
-                        <div class="flag-status ${statusClass}">
-                            ${isResolved ? 'Resolved' : 'Pending'}
-                        </div>
-                    </div>
-                    
-                    <div class="flag-details">
-                        <div class="flag-detail">
-                            <div class="label">Triggered:</div>
-                            <div class="value timestamp">${formatTimestamp(flag.timestamp)}</div>
-                        </div>
-                        
-                        <div class="flag-detail">
-                            <div class="label">Trigger Reason:</div>
-                            <div class="value">
-                                <span class="trigger-reason ${triggerClass}">
-                                    ${formatTriggerReason(flag.trigger_reason)}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="flag-detail">
-                            <div class="label">Context Summary:</div>
-                            <div class="value">
-                                ${flag.context_summary || 'No summary available'}
-                            </div>
-                        </div>
-                        
-                        ${flag.human_instruction ? `
-                            <div class="flag-detail">
-                                <div class="label">Human Instruction:</div>
-                                <div class="human-instruction">
-                                    ${flag.human_instruction}
-                                </div>
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    ${!isResolved ? `
-                        <div class="flag-actions">
-                            <div class="response-form">
-                                <textarea 
-                                    class="response-textarea" 
-                                    placeholder="Provide specific instructions for the next iteration..."
-                                    id="response-${flag.id}"
-                                ></textarea>
-                                
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary" onclick="handleResponse(${flag.id})">
-                                        Submit Response & Resolve
-                                    </button>
-                                    <button class="btn btn-success" onclick="handleResolve(${flag.id})">
-                                        Mark Resolved
-                                    </button>
-                                    <button class="btn btn-warning" id="summarize-${flag.id}" onclick="handleSummarize(${flag.id})">
-                                        AI Summarize
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ` : `
-                        <div class="flag-actions">
-                            <div class="action-buttons">
-                                <button class="btn btn-warning" id="summarize-${flag.id}" onclick="handleSummarize(${flag.id})">
-                                    Regenerate AI Summary
-                                </button>
-                            </div>
-                        </div>
-                    `}
-                </div>
-            `;
+            const actionsOpen = !isResolved
+                ? '<div class="flag-panel__actions">' +
+                    '<div class="field-label">Instruction to orchestrator</div>' +
+                    '<textarea class="textarea" id="response-' + flag.id + '" placeholder="Required for submit. Be explicit about constraints or next steps."></textarea>' +
+                    '<div class="btn-row">' +
+                        '<button type="button" class="btn btn--primary" onclick="handleResponse(' + flag.id + ')">Submit and resolve</button>' +
+                        '<button type="button" class="btn btn--secondary" onclick="handleResolve(' + flag.id + ')">Resolve without instruction</button>' +
+                        '<button type="button" class="btn btn--tertiary" id="summarize-' + flag.id + '" onclick="handleSummarize(' + flag.id + '); event.stopPropagation();">Generate summary</button>' +
+                    '</div>' +
+                  '</div>'
+                : '<div class="flag-panel__actions">' +
+                    '<div class="btn-row">' +
+                        '<button type="button" class="btn btn--tertiary" id="summarize-' + flag.id + '" onclick="handleSummarize(' + flag.id + '); event.stopPropagation();">Regenerate summary</button>' +
+                    '</div>' +
+                  '</div>';
+
+            const humanBlock = flag.human_instruction
+                ? '<div class="instruction-block">' +
+                    '<div class="label">Recorded instruction</div>' +
+                    '<div>' + escHtml(flag.human_instruction) + '</div>' +
+                  '</div>'
+                : '';
+
+            return (
+                '<article class="flag-panel ' + panelMod + '" data-flag-id="' + flag.id + '">' +
+                    '<button type="button" class="flag-panel__head" aria-expanded="false" aria-controls="' + collapseId + '">' +
+                        '<div class="flag-panel__head-inner">' +
+                            '<span class="flag-chev" aria-hidden="true">▸</span>' +
+                            '<div>' +
+                                '<div class="flag-panel__title">Flag #' + flag.id + '</div>' +
+                                '<div class="flag-panel__subtitle">Iteration ' + flag.iteration + ' · ' + formatTimestamp(flag.timestamp) + '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<span class="state-pill ' + pillMod + '">' + pillText + '</span>' +
+                    '</button>' +
+                    '<div id="' + collapseId + '" class="flag-panel__collapse" hidden>' +
+                        '<div class="flag-panel__body">' +
+                            '<dl class="dl-grid">' +
+                                '<dt>Trigger</dt>' +
+                                '<dd><span class="reason-chip reason-' + escHtml(triggerSlug) + '">' + escHtml(triggerDisplay) + '</span></dd>' +
+                                '<dt>Context</dt>' +
+                                '<dd><div class="prose-block">' + escHtml(flag.context_summary || 'No summary.') + '</div></dd>' +
+                            '</dl>' +
+                            humanBlock +
+                            actionsOpen +
+                        '</div>' +
+                    '</div>' +
+                '</article>'
+            );
         }
 
-        // Event handlers
         async function handleResponse(flagId) {
-            const textarea = document.getElementById(`response-${flagId}`);
+            const textarea = document.getElementById('response-' + flagId);
             const instruction = textarea.value.trim();
-
             if (!instruction) {
-                showMessage('Please provide an instruction before submitting.', 'error');
+                showMessage('Enter an instruction before submit.', 'error');
                 return;
             }
-
             try {
                 await respondToFlag(flagId, instruction);
             } catch (error) {
-                showMessage(`Error: ${error.message}`, 'error');
+                showMessage(error.message, 'error');
             }
         }
 
         async function handleResolve(flagId) {
-            if (!confirm('Mark this flag as resolved without providing an instruction?')) {
-                return;
-            }
-
+            if (!confirm('Resolve this flag without writing an instruction file?')) return;
             try {
                 await resolveFlag(flagId);
             } catch (error) {
-                showMessage(`Error: ${error.message}`, 'error');
+                showMessage(error.message, 'error');
             }
         }
 
@@ -588,62 +709,48 @@
             try {
                 await summarizeFlag(flagId);
             } catch (error) {
-                showMessage(`Error: ${error.message}`, 'error');
+                showMessage(error.message, 'error');
             }
         }
 
-        // Fetch and render flags
         async function fetchFlags() {
             try {
                 const flags = await makeRequest('/api/flags');
                 const contentDiv = document.getElementById('content');
-                
-                if (flags.length === 0) {
-                    contentDiv.innerHTML = `
-                        <div class="no-flags">
-                            <h3>No flags found</h3>
-                            <p>Flags will appear here when the system encounters errors or plateaus that require human attention.</p>
-                        </div>
-                    `;
+
+                if (!Array.isArray(flags) || flags.length === 0) {
+                    contentDiv.innerHTML =
+                        '<div class="empty-state">' +
+                            '<h2>No flags</h2>' +
+                            '<p>The flags table is empty. Rows appear when the orchestrator records contact flags in the database.</p>' +
+                        '</div>';
                 } else {
-                    const flagsGrid = flags.map(createFlagCard).join('');
-                    contentDiv.innerHTML = `<div class="flags-grid">${flagsGrid}</div>`;
+                    contentDiv.innerHTML = '<div class="flag-list" id="flagList">' + flags.map(createFlagPanel).join('') + '</div>';
+                    bindFlagPanels(document.getElementById('flagList'));
                 }
-                
-                // Update refresh status
-                const refreshStatus = document.getElementById('refreshStatus');
-                const now = new Date().toLocaleTimeString();
-                refreshStatus.textContent = `Last updated: ${now}`;
-                
+
+                document.getElementById('refreshStatus').textContent =
+                    'Updated ' + new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }) +
+                    ' · interval ' + (REFRESH_INTERVAL / 1000) + 's';
             } catch (error) {
                 console.error('Error fetching flags:', error);
-                document.getElementById('content').innerHTML = `
-                    <div class="error">
-                        <strong>Error loading flags:</strong><br>
-                        ${error.message}
-                    </div>
-                `;
+                document.getElementById('content').innerHTML =
+                    '<div class="inline-error"><strong>Unable to load flags.</strong> ' + escHtml(error.message) + '</div>';
             }
         }
 
-        // Initialize auto-refresh
         function startAutoRefresh() {
-            // Initial load
+            if (refreshInterval) clearInterval(refreshInterval);
             fetchFlags();
-            
-            // Set up auto-refresh
             refreshInterval = setInterval(fetchFlags, REFRESH_INTERVAL);
-            
-            console.log(`Auto-refresh started: updates every ${REFRESH_INTERVAL / 1000} seconds`);
         }
 
-        // Start when page loads
         document.addEventListener('DOMContentLoaded', startAutoRefresh);
-        
-        // Handle visibility change to pause/resume refresh when tab not active
-        document.addEventListener('visibilitychange', () => {
+
+        document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
                 clearInterval(refreshInterval);
+                refreshInterval = null;
             } else {
                 startAutoRefresh();
             }

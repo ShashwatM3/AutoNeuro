@@ -1,0 +1,282 @@
+You are being given an existing codebase skeleton called AutoNeuro. Your job is to convert it into a fully functional, plug-and-play agentic research pipeline. The pipeline must run a continuous optimization loop — calling Claude agents via the Anthropic Python SDK — with a working dashboard for human oversight. Below are your exact instructions.
+
+0. Understand the architecture first
+The system has these roles:
+
+orchestrator.py — the main loop. Reads state, decides which agent to call, calls wrapper.sh, commits or reverts git changes.
+wrapper.sh — runs train.py, writes to ERROR.txt and results.tsv, exits 0 on success.
+agents/contact_agent.py — writes flags to SQLite, generates AI summaries. Already partially implemented.
+dashboard/server.py — Flask server serving the dashboard. Already partially implemented.
+state.json — ONLY stores: error_counter, iteration, current_best. Nothing else.
+database.db — ONLY used by the dashboard. Stores runs and flags tables for the UI. Never read by the orchestrator directly.
+results.tsv — the orchestrator's source of truth for metrics and status. Git-tracked. The orchestrator reads this, NOT the database.
+ERROR.txt — written by wrapper.sh on crash. Read by orchestrator. Cleared by wrapper.sh at start of each run.
+HUMAN_INSTRUCTION.txt — written by dashboard/server.py when a human responds to a flag. Read and cleared by orchestrator.
+
+Critical rule: no overlap in purpose. state.json is for the loop's runtime counters only. database.db is for the dashboard UI only. results.tsv is the orchestrator's decision-making log. Do not mix these.
+
+1. Fix the inconsistency: database.db vs state.json
+The current codebase has both state.json and database.db. They have distinct, non-overlapping roles — keep both, but enforce clean boundaries:
+
+state.json must only ever contain: { "error_counter": int, "iteration": int, "current_best": float | null }. The orchestrator reads and writes this file directly in Python. No other file reads or writes it.
+database.db must only be written by agents/contact_agent.py (for flags) and by the orchestrator (after each run, to sync the runs table for the dashboard). The orchestrator must never make decisions based on database.db.
+Create database.db with a proper schema initialisation function in agents/contact_agent.py (or a new db.py) that creates both tables if they don't exist:
+
+sql  CREATE TABLE IF NOT EXISTS runs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      iteration INTEGER,
+      commit_hash TEXT,
+      status TEXT,        -- KEEP | DISCARD | CRASH
+      metric_value REAL,
+      diff TEXT,
+      error_log TEXT,
+      timestamp TEXT
+  );
+  CREATE TABLE IF NOT EXISTS flags (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      iteration INTEGER,
+      trigger_reason TEXT,  -- ERROR_LIMIT | PLATEAU
+      context_summary TEXT,
+      human_instruction TEXT,
+      resolved INTEGER DEFAULT 0,
+      timestamp TEXT
+  );
+
+Add an init_db() function and call it at the top of orchestrator.py startup and at the top of dashboard/server.py startup so the db is always ready.
+
+
+2. Implement orchestrator.py fully
+The orchestrator is the heartbeat of the system. Implement the following loop exactly:
+on startup:
+  init_db()
+  load state.json → { error_counter, iteration, current_best }
+
+loop forever:
+  # Step 1: check for human instruction override
+  if HUMAN_INSTRUCTION.txt is non-empty:
+    human_instruction = read and clear HUMAN_INSTRUCTION.txt
+  else:
+    human_instruction = None
+
+  # Step 2: read results.tsv
+  rows = parse results.tsv (skip header)
+  n = len(rows)
+
+  # Step 3: decide what to call coding agent with
+  if n == 0:
+    call_coding_agent(mode="FIRST_RUN", human_instruction=human_instruction)
+  elif n == 1:
+    call_coding_agent(mode="SECOND_RUN", human_instruction=human_instruction)
+  else:
+    if ERROR.txt is non-empty:
+      error_text = read ERROR.txt
+      if state["error_counter"] >= 5:
+        call_contact_agent(trigger="ERROR_LIMIT")
+        wait_for_human_instruction()   # block polling HUMAN_INSTRUCTION.txt every 30s
+      else:
+        call_coding_agent(mode="FIX_ERROR", error=error_text, human_instruction=human_instruction)
+    else:
+      last = rows[-1]; prev = rows[-2]
+      if float(last.metric) > float(prev.metric):   # higher is better — adjust sign if needed
+        git_commit(f"iteration {state['iteration']}: KEEP")
+        update results.tsv last row status → KEEP
+        state["current_best"] = max(state["current_best"] or 0, float(last.metric))
+      else:
+        git_checkout_discard()   # git checkout -- train.py prepare.py
+        update results.tsv last row status → DISCARD
+      call_coding_agent(mode="OPTIMIZE", human_instruction=human_instruction)
+
+  # Step 4: run wrapper.sh
+  subprocess.run(["bash", "wrapper.sh"])
+
+  # Step 5: sync run to database.db for dashboard
+  sync_latest_run_to_db()
+
+  # Step 6: update state.json
+  if last run was CRASH:
+    state["error_counter"] += 1
+  else:
+    state["error_counter"] = 0
+  state["iteration"] += 1
+  save state.json
+
+3. Implement the Coding Agent call in orchestrator.py
+Use the Anthropic Python SDK directly. Do not use any wrapper library. The pattern is:
+pythonimport anthropic
+import os
+
+client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+def call_coding_agent(mode: str, error: str = None, human_instruction: str = None):
+    system_prompt = open("agents/coding_agent.md").read()
+    train_code = open("train.py").read()
+    prepare_code = open("prepare.py").read()
+    results = open("results.tsv").read()
+    program = open("program.md").read()
+
+    if mode == "FIRST_RUN":
+        user_msg = f"""This is the very first iteration. Here is the current codebase.
+
+program.md:
+{program}
+
+train.py:
+{train_code}
+
+prepare.py:
+{prepare_code}
+
+Do not change anything yet. Just confirm you have read the files and are ready."""
+
+    elif mode == "SECOND_RUN":
+        user_msg = f"""This is only the second iteration. We have one result but no comparison yet.
+You are free to make one change you think will improve the metric.
+
+program.md:
+{program}
+
+train.py:
+{train_code}
+
+prepare.py:
+{prepare_code}
+
+results.tsv:
+{results}
+
+Make exactly one change. Write the full updated content of whichever file(s) you modify."""
+
+    elif mode == "FIX_ERROR":
+        user_msg = f"""The last run crashed. Fix the error.
+
+ERROR:
+{error}
+
+train.py:
+{train_code}
+
+prepare.py:
+{prepare_code}
+
+Write the full corrected file(s)."""
+
+    elif mode == "OPTIMIZE":
+        user_msg = f"""Propose and implement one optimization to improve the metric.
+
+program.md:
+{program}
+
+train.py:
+{train_code}
+
+prepare.py:
+{prepare_code}
+
+results.tsv:
+{results}
+
+{"HUMAN INSTRUCTION (high priority): " + human_instruction if human_instruction else ""}
+
+Write the full updated content of whichever file(s) you modify."""
+
+    response = client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=8096,
+        system=system_prompt,
+        messages=[{"role": "user", "content": user_msg}]
+    )
+
+    raw = response.content[0].text
+
+    # Parse and write back files
+    # The coding agent must be instructed (in coding_agent.md) to wrap file contents like:
+    # <file name="train.py">...</file>
+    # Parse those tags and overwrite the files.
+    import re
+    for match in re.finditer(r'<file name="(train\.py|prepare\.py)">(.*?)</file>', raw, re.DOTALL):
+        fname, content = match.group(1), match.group(2).strip()
+        open(fname, "w").write(content)
+        print(f"[orchestrator] wrote {fname}")
+
+4. Implement the Research Agent call
+The coding agent can optionally call the research agent. Since the coding agent runs in a single API call (stateless), implement the research agent as a utility function that the orchestrator can inject into the coding agent's prompt on request. Alternatively: make the coding agent call its own research sub-call using a second client.messages.create inside orchestrator.py. The simpler approach: pass the contents of all files in research_docs/ directly into the coding agent's system prompt under a ## Reference Documents section, so no separate agent call is needed. This avoids complexity for the hackathon.
+
+5. Write agents/coding_agent.md
+Replace the placeholder. The system prompt must:
+
+Tell the agent its role: optimize train.py and/or prepare.py to improve the metric defined in program.md.
+Tell it to output any modified files wrapped in <file name="filename.py">...</file> tags and nothing else.
+Tell it it is NOT allowed to modify evaluate.py, wrapper.sh, orchestrator.py, or any file in agents/ or dashboard/.
+Tell it the metric direction (higher is better unless program.md says otherwise).
+Tell it to make exactly one logical change per iteration.
+Include a ## Reference Documents section header — the orchestrator will inject research doc contents here at runtime.
+
+
+6. Write agents/contact_agent.md
+Replace the placeholder. The system prompt must:
+
+Tell it its only job is to write a structured flag summary.
+It does not write code.
+It must output a plain text summary covering: what went wrong, how many consecutive errors, last known metric, suggested options for the human (A, B, C style).
+
+
+7. Implement agents/contact_agent.py — escalate() fully
+The current escalate() function is nearly complete. Ensure:
+
+init_db() is called to create tables if they don't exist.
+generate_summary() uses model claude-sonnet-4-20250514.
+write_flag_to_db() and write_run_to_db() work correctly against the schema in section 1.
+send_email() remains a no-op stub (fine for now).
+Remove the __main__ test block or gate it behind a proper if __name__ == "__main__" guard.
+
+
+8. Fix dashboard/server.py
+The server is mostly implemented. Ensure:
+
+init_db() is called on startup.
+All routes correctly query database.db — no file reads of results.tsv or state.json from the server. The dashboard reads ONLY from the database.
+The POST /api/flags/<id>/respond endpoint writes HUMAN_INSTRUCTION.txt in the repo root (it already does this — verify the path is correct relative to the server file location).
+The POST /api/flags/<id>/summarize endpoint calls generate_summary() from contact_agent.py.
+Add a GET /api/runs endpoint that returns all rows from the runs table as JSON, used by dashboard/index.html.
+
+
+9. Fix dashboard/index.html
+The runs page must:
+
+Fetch from GET /api/runs.
+Display each run as a card with: iteration number, metric value, commit hash, diff (truncated), status.
+Border colour: green (#27ae60) for KEEP, yellow (#f39c12) for DISCARD, red (#e74c3c) for CRASH.
+Auto-refresh every 10 seconds.
+
+dashboard/flags.html already looks correct — keep it.
+
+10. Add a db.py at the root
+Create db.py with a single init_db() function that creates both tables. Import this in orchestrator.py, dashboard/server.py, and agents/contact_agent.py instead of duplicating the schema.
+
+11. Update pyproject.toml
+Ensure dependencies include at minimum:
+tomldependencies = [
+    "flask",
+    "anthropic>=0.40.0",
+]
+
+12. What you must NOT change
+
+wrapper.sh — it is already correct.
+evaluate.py — locked, do not touch.
+results.tsv header format: commit_hash\tmetric\tvram\tstatus\tdescription
+state.json schema: exactly { "error_counter", "iteration", "current_best" }.
+train.py and prepare.py stubs — leave them as stubs, they are experiment-specific.
+
+
+13. Final check: what "plug and play" means
+After your implementation, a user should be able to:
+
+Edit train.py with their model.
+Edit prepare.py with their data loading.
+Edit program.md to describe their experiment and metric direction.
+Run python orchestrator.py and the loop starts.
+Run python dashboard/server.py in a second terminal to see the dashboard at localhost:5000.
+That's it.
+
+No other files should need to be touched.

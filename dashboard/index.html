@@ -3,458 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoNeuro - Experiment Runs</title>
+    <title>Experiment runs · AutoNeuro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-page: #f4f4f4;
+            --bg-surface: #ffffff;
+            --border-subtle: #e0e0e0;
+            --text-primary: #161616;
+            --text-secondary: #525252;
+            --text-helper: #6f6f6f;
+            --interactive: #0f62fe;
+            --keep: #27ae60;
+            --discard: #f39c12;
+            --crash: #e74c3c;
+            --code-bg: #f4f4f4;
+            --header-height: 3rem;
+            --max-content: 99rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #2c3e50;
-            line-height: 1.6;
+            font-family: "IBM Plex Sans", system-ui, sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: var(--bg-page);
+            min-height: 100vh;
         }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .shell-header {
+            height: var(--header-height);
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
-            justify-content: space-between;
+            align-items: stretch;
+        }
+        .shell-header__brand {
+            display: flex;
             align-items: center;
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
+            padding: 0 var(--spacing-md);
+            border-right: 1px solid var(--border-subtle);
             font-weight: 600;
         }
-
-        .nav {
+        .shell-header__brand span { font-weight: 400; color: var(--text-secondary); margin-left: 0.5rem; }
+        .shell-nav { display: flex; align-items: stretch; }
+        .shell-nav a {
             display: flex;
-            gap: 1rem;
-        }
-
-        .nav a {
-            color: white;
+            align-items: center;
+            padding: 0 var(--spacing-lg);
+            color: var(--text-secondary);
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .nav a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav a.active {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .page-title {
-            margin-bottom: 2rem;
-        }
-
-        .page-title h2 {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-title p {
-            color: #7f8c8d;
-        }
-
-        .runs-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-        }
-
-        .run-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #bdc3c7;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .run-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Status-based border colors */
-        .run-card.status-keep {
-            border-left-color: #27ae60; /* Green */
-        }
-
-        .run-card.status-discard {
-            border-left-color: #f1c40f; /* Yellow */
-        }
-
-        .run-card.status-crash {
-            border-left-color: #e74c3c; /* Red */
-        }
-
-        .run-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .run-iteration {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .run-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
             font-weight: 500;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        .shell-nav a:hover { background: var(--bg-page); color: var(--text-primary); }
+        .shell-nav a.is-active { color: var(--text-primary); border-bottom-color: var(--interactive); }
+        .layout {
+            max-width: var(--max-content);
+            margin: 0 auto;
+            padding: var(--spacing-lg) var(--spacing-xl);
+        }
+        .page-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .page-header h1 { font-size: 1.25rem; font-weight: 600; }
+        .page-header p { font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.25rem; max-width: 42rem; }
+        .meta-bar { font-size: 0.75rem; color: var(--text-helper); }
+        .run-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+            gap: var(--spacing-lg);
+        }
+        .run-card {
+            background: var(--bg-surface);
+            border-radius: 4px;
+            border: 3px solid var(--border-subtle);
+            padding: var(--spacing-md);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        }
+        .run-card--keep { border-color: var(--keep); }
+        .run-card--discard { border-color: var(--discard); }
+        .run-card--crash { border-color: var(--crash); }
+        .run-card__status {
+            font-size: 0.6875rem;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
         }
-
-        .run-status.keep {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .run-status.discard {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .run-status.crash {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        .run-details {
-            margin-bottom: 1rem;
-        }
-
-        .run-detail {
+        .run-card__status--keep { color: var(--keep); }
+        .run-card__status--discard { color: var(--discard); }
+        .run-card__status--crash { color: var(--crash); }
+        .run-card__row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
-            padding: 0.25rem 0;
+            gap: 0.5rem;
+            margin-top: 0.35rem;
+            font-size: 0.8125rem;
         }
-
-        .run-detail .label {
-            font-weight: 600;
-            color: #7f8c8d;
-            width: 30%;
-        }
-
-        .run-detail .value {
-            flex: 1;
-            color: #2c3e50;
-        }
-
-        .commit-hash {
-            font-family: 'Courier New', monospace;
-            background-color: #f8f9fa;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.9rem;
-        }
-
-        .metric-value {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .metric-value.positive {
-            color: #27ae60;
-        }
-
-        .metric-value.negative {
-            color: #e74c3c;
-        }
-
+        .run-card__label { color: var(--text-secondary); flex-shrink: 0; }
+        .run-card__value { text-align: right; word-break: break-word; }
+        .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.75rem; }
+        .metric { font-weight: 600; font-variant-numeric: tabular-nums; }
         .diff-preview {
-            background-color: #f8f9fa;
-            border-radius: 4px;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            max-height: 100px;
-            overflow-y: auto;
-            border-left: 3px solid #3498db;
-        }
-
-        .error-log {
-            background-color: #ffeaa7;
-            border: 1px solid #fdcb6e;
-            border-radius: 4px;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: #e17055;
-            max-height: 100px;
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--code-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 2px;
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 0.72rem;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 10rem;
             overflow-y: auto;
         }
-
-        .loading {
+        .empty-state, .inline-error {
             text-align: center;
-            padding: 3rem;
-            color: #7f8c8d;
+            padding: var(--spacing-xl);
+            background: var(--bg-surface);
+            border: 1px dashed var(--border-subtle);
         }
-
-        .error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            padding: 1rem;
-            margin: 2rem 0;
-            color: #721c24;
-        }
-
-        .auto-refresh {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background-color: #3498db;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .timestamp {
-            color: #95a5a6;
-            font-size: 0.85rem;
-        }
-
-        .no-runs {
-            text-align: center;
-            padding: 3rem;
-            color: #7f8c8d;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .runs-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .container {
-                padding: 0 1rem;
-            }
-        }
+        .inline-error { border-color: var(--crash); text-align: left; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <h1>🧠 AutoNeuro Dashboard</h1>
-            <nav class="nav">
-                <a href="/" class="active">Experiment Runs</a>
-                <a href="/flags">Flags</a>
-            </nav>
-        </div>
+    <header class="shell-header">
+        <div class="shell-header__brand">AutoNeuro <span>Operations</span></div>
+        <nav class="shell-nav" aria-label="Primary">
+            <a href="/" class="is-active">Runs</a>
+            <a href="/flags">Flags</a>
+        </nav>
     </header>
-
-    <div class="container">
-        <div class="page-title">
-            <h2>Experiment Runs</h2>
-            <p>Monitor all ML experiments, their outcomes, and performance metrics</p>
+    <main class="layout">
+        <div class="page-header">
+            <div>
+                <h1>Experiment runs</h1>
+                <p>Synced from the orchestrator after each training run. Cards refresh from the database every 10 seconds.</p>
+            </div>
+            <div class="meta-bar" id="refreshStatus" aria-live="polite">Loading…</div>
         </div>
-
-        <div class="auto-refresh" id="refreshStatus">
-            Auto-refresh: ON
-        </div>
-
-        <div id="content">
-            <div class="loading">Loading experiment runs...</div>
-        </div>
-    </div>
-
+        <div id="content"></div>
+    </main>
     <script>
-        let refreshInterval;
-        const REFRESH_INTERVAL = 30000; // 30 seconds
+        const REFRESH_INTERVAL_MS = 10000;
 
-        // Utility functions
-        function formatTimestamp(timestamp) {
-            if (!timestamp) return 'N/A';
-            const date = new Date(timestamp);
-            return date.toLocaleString();
+        function escHtml(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
-        function truncateHash(hash) {
-            if (!hash) return 'N/A';
-            return hash.length > 8 ? hash.substring(0, 8) + '...' : hash;
+        function truncate(s, n) {
+            if (!s) return '';
+            return s.length > n ? s.slice(0, n) + '…' : s;
         }
 
-        function formatMetricValue(value) {
-            if (value === null || value === undefined) return 'N/A';
-            if (typeof value === 'number') {
-                return value.toFixed(4);
-            }
-            return String(value);
+        function formatMetric(v) {
+            if (v === null || v === undefined) return '—';
+            const x = Number(v);
+            return Number.isFinite(x) ? x.toFixed(4) : String(v);
         }
 
-        function getActionDescription(status) {
-            switch (status) {
-                case 'KEEP':
-                    return 'Committed (improved metric)';
-                case 'DISCARD':
-                    return 'Reverted (worse metric)';
-                case 'CRASH':
-                    return 'Failed (error occurred)';
-                default:
-                    return status;
-            }
+        function formatTs(ts) {
+            if (!ts) return '—';
+            return new Date(ts).toLocaleString(undefined, {
+                year: 'numeric', month: 'short', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
         }
 
-        // Create run card HTML
-        function createRunCard(run) {
-            const statusClass = run.status.toLowerCase();
-            const hasError = run.error_log && run.error_log.trim();
-            
-            return `
-                <div class="run-card status-${statusClass}">
-                    <div class="run-header">
-                        <div class="run-iteration">Iteration ${run.iteration}</div>
-                        <div class="run-status ${statusClass}">${run.status}</div>
-                    </div>
-                    
-                    <div class="run-details">
-                        <div class="run-detail">
-                            <div class="label">Timestamp:</div>
-                            <div class="value timestamp">${formatTimestamp(run.timestamp)}</div>
-                        </div>
-                        
-                        <div class="run-detail">
-                            <div class="label">Metric:</div>
-                            <div class="value">
-                                <span class="metric-value ${run.metric_value > 0 ? 'positive' : 'negative'}">
-                                    ${formatMetricValue(run.metric_value)}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="run-detail">
-                            <div class="label">Commit:</div>
-                            <div class="value">
-                                <span class="commit-hash">${truncateHash(run.commit_hash)}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="run-detail">
-                            <div class="label">Action:</div>
-                            <div class="value">${getActionDescription(run.status)}</div>
-                        </div>
-                    </div>
-                    
-                    ${run.diff ? `
-                        <div class="diff-preview">
-                            <strong>Code Changes:</strong><br>
-                            ${run.diff.substring(0, 200)}${run.diff.length > 200 ? '...' : ''}
-                        </div>
-                    ` : ''}
-                    
-                    ${hasError ? `
-                        <div class="error-log">
-                            <strong>Error Log:</strong><br>
-                            ${run.error_log.substring(0, 300)}${run.error_log.length > 300 ? '...' : ''}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+        function statusClass(status) {
+            const u = (status || '').toUpperCase();
+            if (u === 'KEEP') return 'keep';
+            if (u === 'DISCARD') return 'discard';
+            if (u === 'CRASH') return 'crash';
+            return 'unknown';
         }
 
-        // Fetch and render runs
+        function renderCard(run) {
+            const sc = statusClass(run.status);
+            const borderMod = sc === 'unknown' ? '' : ' run-card--' + sc;
+            const statusLabelMod = sc === 'unknown' ? '' : ' run-card__status--' + sc;
+            const diffText = truncate(run.diff || '', 600);
+            return (
+                '<article class="run-card' + borderMod + '">' +
+                    '<div class="run-card__status' + statusLabelMod + '">' + escHtml(run.status || '—') + '</div>' +
+                    '<div class="run-card__row"><span class="run-card__label">Iteration</span><span class="run-card__value mono">' + escHtml(String(run.iteration ?? '—')) + '</span></div>' +
+                    '<div class="run-card__row"><span class="run-card__label">Metric</span><span class="run-card__value metric">' + escHtml(formatMetric(run.metric_value)) + '</span></div>' +
+                    '<div class="run-card__row"><span class="run-card__label">Commit</span><span class="run-card__value mono">' + escHtml(truncate(run.commit_hash || '', 14)) + '</span></div>' +
+                    '<div class="run-card__row"><span class="run-card__label">Time</span><span class="run-card__value ts">' + escHtml(formatTs(run.timestamp)) + '</span></div>' +
+                    (diffText
+                        ? '<div class="diff-preview">' + escHtml(diffText) + '</div>'
+                        : '') +
+                '</article>'
+            );
+        }
+
         async function fetchRuns() {
+            const el = document.getElementById('content');
+            const statusEl = document.getElementById('refreshStatus');
             try {
-                const response = await fetch('/api/runs');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const runs = await response.json();
-                const contentDiv = document.getElementById('content');
-                
-                if (runs.length === 0) {
-                    contentDiv.innerHTML = `
-                        <div class="no-runs">
-                            <h3>No experiment runs found</h3>
-                            <p>Experiments will appear here once the training loop starts generating runs.</p>
-                        </div>
-                    `;
+                const res = await fetch('/api/runs');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const runs = await res.json();
+                if (!Array.isArray(runs) || runs.length === 0) {
+                    el.innerHTML = '<div class="empty-state"><p>No runs in the database yet. Start <code class="mono">python orchestrator.py</code>.</p></div>';
                 } else {
-                    const runsGrid = runs.map(createRunCard).join('');
-                    contentDiv.innerHTML = `<div class="runs-grid">${runsGrid}</div>`;
+                    el.innerHTML = '<div class="run-grid">' + runs.map(renderCard).join('') + '</div>';
                 }
-                
-                // Update refresh status
-                const refreshStatus = document.getElementById('refreshStatus');
-                const now = new Date().toLocaleTimeString();
-                refreshStatus.textContent = `Last updated: ${now}`;
-                
-            } catch (error) {
-                console.error('Error fetching runs:', error);
-                document.getElementById('content').innerHTML = `
-                    <div class="error">
-                        <strong>Error loading runs:</strong><br>
-                        ${error.message}
-                    </div>
-                `;
+                statusEl.textContent = 'Updated ' + new Date().toLocaleTimeString() + ' · every ' + (REFRESH_INTERVAL_MS / 1000) + 's';
+            } catch (e) {
+                el.innerHTML = '<div class="inline-error"><strong>Unable to load runs.</strong> ' + escHtml(e.message) + '</div>';
             }
         }
 
-        // Initialize auto-refresh
-        function startAutoRefresh() {
-            // Initial load
+        let timer;
+        function startRefresh() {
+            if (timer) clearInterval(timer);
             fetchRuns();
-            
-            // Set up auto-refresh
-            refreshInterval = setInterval(fetchRuns, REFRESH_INTERVAL);
-            
-            console.log(`Auto-refresh started: updates every ${REFRESH_INTERVAL / 1000} seconds`);
+            timer = setInterval(fetchRuns, REFRESH_INTERVAL_MS);
         }
 
-        // Start when page loads
-        document.addEventListener('DOMContentLoaded', startAutoRefresh);
-        
-        // Handle visibility change to pause/resume refresh when tab not active
-        document.addEventListener('visibilitychange', () => {
+        document.addEventListener('DOMContentLoaded', startRefresh);
+        document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
-                clearInterval(refreshInterval);
-            } else {
-                startAutoRefresh();
-            }
+                clearInterval(timer);
+                timer = null;
+            } else startRefresh();
         });
     </script>
 </body>
