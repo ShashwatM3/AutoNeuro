@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoNeuro - Flags Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            color: #7f8c8d;
+        }
+
+        .flags-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        }
+
+        .flag-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #e67e22;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .flag-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .flag-card.resolved {
+            border-left-color: #27ae60;
+            opacity: 0.8;
+        }
+
+        .flag-card.pending {
+            border-left-color: #e74c3c;
+        }
+
+        .flag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .flag-iteration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .flag-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .flag-status.resolved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .flag-status.pending {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .flag-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .flag-detail {
+            margin-bottom: 1rem;
+        }
+
+        .flag-detail .label {
+            font-weight: 600;
+            color: #7f8c8d;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .flag-detail .value {
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            word-wrap: break-word;
+        }
+
+        .trigger-reason {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .trigger-reason.error-limit {
+            background-color: #e74c3c;
+        }
+
+        .trigger-reason.plateau {
+            background-color: #f39c12;
+        }
+
+        .timestamp {
+            color: #95a5a6;
+            font-size: 0.85rem;
+        }
+
+        .flag-actions {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .response-form {
+            margin-bottom: 1rem;
+        }
+
+        .response-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .response-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background-color: #229954;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background-color: #e67e22;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #7f8c8d;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 2rem 0;
+            color: #721c24;
+        }
+
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #155724;
+        }
+
+        .auto-refresh {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-flags {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .human-instruction {
+            background-color: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .flags-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>🧠 AutoNeuro Dashboard</h1>
+            <nav class="nav">
+                <a href="/">Experiment Runs</a>
+                <a href="/flags" class="active">Flags</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>Flags Management</h2>
+            <p>Human-in-the-loop escalations requiring attention and guidance</p>
+        </div>
+
+        <div class="auto-refresh" id="refreshStatus">
+            Auto-refresh: ON
+        </div>
+
+        <div id="content">
+            <div class="loading">Loading flags...</div>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval;
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+
+        // Utility functions
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        }
+
+        function formatTriggerReason(reason) {
+            return reason ? reason.replace('_', ' ').toLowerCase() : 'unknown';
+        }
+
+        // API helpers
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+                    throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API request failed:', error);
+                throw error;
+            }
+        }
+
+        // Actions
+        async function respondToFlag(flagId, instruction) {
+            const data = await makeRequest(`/api/flags/${flagId}/respond`, {
+                method: 'POST',
+                body: JSON.stringify({ human_instruction: instruction })
+            });
+
+            showMessage(data.message, 'success');
+            setTimeout(fetchFlags, 1000); // Refresh after 1 second
+        }
+
+        async function resolveFlag(flagId) {
+            const data = await makeRequest(`/api/flags/${flagId}/resolve`, {
+                method: 'POST'
+            });
+
+            showMessage(data.message, 'success');
+            setTimeout(fetchFlags, 1000);
+        }
+
+        async function summarizeFlag(flagId) {
+            const button = document.querySelector(`#summarize-${flagId}`);
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Generating...';
+            }
+
+            try {
+                const data = await makeRequest(`/api/flags/${flagId}/summarize`, {
+                    method: 'POST'
+                });
+
+                showMessage(data.message, 'success');
+                setTimeout(fetchFlags, 1000);
+            } finally {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = 'AI Summarize';
+                }
+            }
+        }
+
+        // Show temporary messages
+        function showMessage(message, type = 'info') {
+            const existingMessage = document.querySelector('.message');
+            if (existingMessage) existingMessage.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+
+            const container = document.querySelector('.container');
+            container.insertBefore(messageDiv, container.firstChild.nextSibling);
+
+            setTimeout(() => messageDiv.remove(), 5000);
+        }
+
+        // Create flag card HTML
+        function createFlagCard(flag) {
+            const isResolved = flag.resolved;
+            const statusClass = isResolved ? 'resolved' : 'pending';
+            const triggerClass = formatTriggerReason(flag.trigger_reason).replace(' ', '-');
+
+            return `
+                <div class="flag-card ${statusClass}">
+                    <div class="flag-header">
+                        <div class="flag-iteration">Flag #${flag.id} - Iteration ${flag.iteration}</div>
+                        <div class="flag-status ${statusClass}">
+                            ${isResolved ? 'Resolved' : 'Pending'}
+                        </div>
+                    </div>
+                    
+                    <div class="flag-details">
+                        <div class="flag-detail">
+                            <div class="label">Triggered:</div>
+                            <div class="value timestamp">${formatTimestamp(flag.timestamp)}</div>
+                        </div>
+                        
+                        <div class="flag-detail">
+                            <div class="label">Trigger Reason:</div>
+                            <div class="value">
+                                <span class="trigger-reason ${triggerClass}">
+                                    ${formatTriggerReason(flag.trigger_reason)}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="flag-detail">
+                            <div class="label">Context Summary:</div>
+                            <div class="value">
+                                ${flag.context_summary || 'No summary available'}
+                            </div>
+                        </div>
+                        
+                        ${flag.human_instruction ? `
+                            <div class="flag-detail">
+                                <div class="label">Human Instruction:</div>
+                                <div class="human-instruction">
+                                    ${flag.human_instruction}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${!isResolved ? `
+                        <div class="flag-actions">
+                            <div class="response-form">
+                                <textarea 
+                                    class="response-textarea" 
+                                    placeholder="Provide specific instructions for the next iteration..."
+                                    id="response-${flag.id}"
+                                ></textarea>
+                                
+                                <div class="action-buttons">
+                                    <button class="btn btn-primary" onclick="handleResponse(${flag.id})">
+                                        Submit Response & Resolve
+                                    </button>
+                                    <button class="btn btn-success" onclick="handleResolve(${flag.id})">
+                                        Mark Resolved
+                                    </button>
+                                    <button class="btn btn-warning" id="summarize-${flag.id}" onclick="handleSummarize(${flag.id})">
+                                        AI Summarize
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="flag-actions">
+                            <div class="action-buttons">
+                                <button class="btn btn-warning" id="summarize-${flag.id}" onclick="handleSummarize(${flag.id})">
+                                    Regenerate AI Summary
+                                </button>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        // Event handlers
+        async function handleResponse(flagId) {
+            const textarea = document.getElementById(`response-${flagId}`);
+            const instruction = textarea.value.trim();
+
+            if (!instruction) {
+                showMessage('Please provide an instruction before submitting.', 'error');
+                return;
+            }
+
+            try {
+                await respondToFlag(flagId, instruction);
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function handleResolve(flagId) {
+            if (!confirm('Mark this flag as resolved without providing an instruction?')) {
+                return;
+            }
+
+            try {
+                await resolveFlag(flagId);
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function handleSummarize(flagId) {
+            try {
+                await summarizeFlag(flagId);
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Fetch and render flags
+        async function fetchFlags() {
+            try {
+                const flags = await makeRequest('/api/flags');
+                const contentDiv = document.getElementById('content');
+                
+                if (flags.length === 0) {
+                    contentDiv.innerHTML = `
+                        <div class="no-flags">
+                            <h3>No flags found</h3>
+                            <p>Flags will appear here when the system encounters errors or plateaus that require human attention.</p>
+                        </div>
+                    `;
+                } else {
+                    const flagsGrid = flags.map(createFlagCard).join('');
+                    contentDiv.innerHTML = `<div class="flags-grid">${flagsGrid}</div>`;
+                }
+                
+                // Update refresh status
+                const refreshStatus = document.getElementById('refreshStatus');
+                const now = new Date().toLocaleTimeString();
+                refreshStatus.textContent = `Last updated: ${now}`;
+                
+            } catch (error) {
+                console.error('Error fetching flags:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <strong>Error loading flags:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize auto-refresh
+        function startAutoRefresh() {
+            // Initial load
+            fetchFlags();
+            
+            // Set up auto-refresh
+            refreshInterval = setInterval(fetchFlags, REFRESH_INTERVAL);
+            
+            console.log(`Auto-refresh started: updates every ${REFRESH_INTERVAL / 1000} seconds`);
+        }
+
+        // Start when page loads
+        document.addEventListener('DOMContentLoaded', startAutoRefresh);
+        
+        // Handle visibility change to pause/resume refresh when tab not active
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(refreshInterval);
+            } else {
+                startAutoRefresh();
+            }
+        });
+    </script>
+</body>
+</html>

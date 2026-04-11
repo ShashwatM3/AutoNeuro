@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoNeuro - Experiment Runs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-title {
+            margin-bottom: 2rem;
+        }
+
+        .page-title h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            color: #7f8c8d;
+        }
+
+        .runs-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        }
+
+        .run-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #bdc3c7;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .run-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Status-based border colors */
+        .run-card.status-keep {
+            border-left-color: #27ae60; /* Green */
+        }
+
+        .run-card.status-discard {
+            border-left-color: #f1c40f; /* Yellow */
+        }
+
+        .run-card.status-crash {
+            border-left-color: #e74c3c; /* Red */
+        }
+
+        .run-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .run-iteration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .run-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .run-status.keep {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .run-status.discard {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .run-status.crash {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .run-details {
+            margin-bottom: 1rem;
+        }
+
+        .run-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .run-detail .label {
+            font-weight: 600;
+            color: #7f8c8d;
+            width: 30%;
+        }
+
+        .run-detail .value {
+            flex: 1;
+            color: #2c3e50;
+        }
+
+        .commit-hash {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .metric-value.positive {
+            color: #27ae60;
+        }
+
+        .metric-value.negative {
+            color: #e74c3c;
+        }
+
+        .diff-preview {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 100px;
+            overflow-y: auto;
+            border-left: 3px solid #3498db;
+        }
+
+        .error-log {
+            background-color: #ffeaa7;
+            border: 1px solid #fdcb6e;
+            border-radius: 4px;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #e17055;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 2rem 0;
+            color: #721c24;
+        }
+
+        .auto-refresh {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .timestamp {
+            color: #95a5a6;
+            font-size: 0.85rem;
+        }
+
+        .no-runs {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .runs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>🧠 AutoNeuro Dashboard</h1>
+            <nav class="nav">
+                <a href="/" class="active">Experiment Runs</a>
+                <a href="/flags">Flags</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>Experiment Runs</h2>
+            <p>Monitor all ML experiments, their outcomes, and performance metrics</p>
+        </div>
+
+        <div class="auto-refresh" id="refreshStatus">
+            Auto-refresh: ON
+        </div>
+
+        <div id="content">
+            <div class="loading">Loading experiment runs...</div>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval;
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+
+        // Utility functions
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        }
+
+        function truncateHash(hash) {
+            if (!hash) return 'N/A';
+            return hash.length > 8 ? hash.substring(0, 8) + '...' : hash;
+        }
+
+        function formatMetricValue(value) {
+            if (value === null || value === undefined) return 'N/A';
+            if (typeof value === 'number') {
+                return value.toFixed(4);
+            }
+            return String(value);
+        }
+
+        function getActionDescription(status) {
+            switch (status) {
+                case 'KEEP':
+                    return 'Committed (improved metric)';
+                case 'DISCARD':
+                    return 'Reverted (worse metric)';
+                case 'CRASH':
+                    return 'Failed (error occurred)';
+                default:
+                    return status;
+            }
+        }
+
+        // Create run card HTML
+        function createRunCard(run) {
+            const statusClass = run.status.toLowerCase();
+            const hasError = run.error_log && run.error_log.trim();
+            
+            return `
+                <div class="run-card status-${statusClass}">
+                    <div class="run-header">
+                        <div class="run-iteration">Iteration ${run.iteration}</div>
+                        <div class="run-status ${statusClass}">${run.status}</div>
+                    </div>
+                    
+                    <div class="run-details">
+                        <div class="run-detail">
+                            <div class="label">Timestamp:</div>
+                            <div class="value timestamp">${formatTimestamp(run.timestamp)}</div>
+                        </div>
+                        
+                        <div class="run-detail">
+                            <div class="label">Metric:</div>
+                            <div class="value">
+                                <span class="metric-value ${run.metric_value > 0 ? 'positive' : 'negative'}">
+                                    ${formatMetricValue(run.metric_value)}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="run-detail">
+                            <div class="label">Commit:</div>
+                            <div class="value">
+                                <span class="commit-hash">${truncateHash(run.commit_hash)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="run-detail">
+                            <div class="label">Action:</div>
+                            <div class="value">${getActionDescription(run.status)}</div>
+                        </div>
+                    </div>
+                    
+                    ${run.diff ? `
+                        <div class="diff-preview">
+                            <strong>Code Changes:</strong><br>
+                            ${run.diff.substring(0, 200)}${run.diff.length > 200 ? '...' : ''}
+                        </div>
+                    ` : ''}
+                    
+                    ${hasError ? `
+                        <div class="error-log">
+                            <strong>Error Log:</strong><br>
+                            ${run.error_log.substring(0, 300)}${run.error_log.length > 300 ? '...' : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Fetch and render runs
+        async function fetchRuns() {
+            try {
+                const response = await fetch('/api/runs');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const runs = await response.json();
+                const contentDiv = document.getElementById('content');
+                
+                if (runs.length === 0) {
+                    contentDiv.innerHTML = `
+                        <div class="no-runs">
+                            <h3>No experiment runs found</h3>
+                            <p>Experiments will appear here once the training loop starts generating runs.</p>
+                        </div>
+                    `;
+                } else {
+                    const runsGrid = runs.map(createRunCard).join('');
+                    contentDiv.innerHTML = `<div class="runs-grid">${runsGrid}</div>`;
+                }
+                
+                // Update refresh status
+                const refreshStatus = document.getElementById('refreshStatus');
+                const now = new Date().toLocaleTimeString();
+                refreshStatus.textContent = `Last updated: ${now}`;
+                
+            } catch (error) {
+                console.error('Error fetching runs:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <strong>Error loading runs:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize auto-refresh
+        function startAutoRefresh() {
+            // Initial load
+            fetchRuns();
+            
+            // Set up auto-refresh
+            refreshInterval = setInterval(fetchRuns, REFRESH_INTERVAL);
+            
+            console.log(`Auto-refresh started: updates every ${REFRESH_INTERVAL / 1000} seconds`);
+        }
+
+        // Start when page loads
+        document.addEventListener('DOMContentLoaded', startAutoRefresh);
+        
+        // Handle visibility change to pause/resume refresh when tab not active
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(refreshInterval);
+            } else {
+                startAutoRefresh();
+            }
+        });
+    </script>
+</body>
+</html>
