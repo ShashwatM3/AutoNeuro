@@ -14,7 +14,7 @@ import os
 DATA_DIR = ".cache/iris"
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-C = 1.0      # Regularization parameter
+C = 0.5      # Regularization parameter
 KERNEL = 'rbf'  # Kernel type: 'linear', 'poly', 'rbf', 'sigmoid'
 
 def run_train() -> None:
