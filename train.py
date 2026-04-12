@@ -10,15 +10,14 @@ import os
 
 import numpy as np
 from sklearn.metrics import accuracy_score
-from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 
 DATA_DIR = ".cache/iris"
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-SVC_KERNEL = 'rbf'  # Linear kernel didn't reach the performance target
+SVC_KERNEL = 'rbf'  # Using RBF kernel for better performance on nonlinear data
 SVC_C = 1.0  # Regularization parameter
-SVC_GAMMA = 'scale'  # Kernel coefficient
+SVC_GAMMA = 0.1  # Setting a fixed value for gamma to better capture variance
 
 
 def run_train() -> None:
