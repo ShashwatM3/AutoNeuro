@@ -42,3 +42,17 @@ def init_db() -> None:
         conn.commit()
     finally:
         conn.close()
+
+
+def clear_dashboard_db() -> None:
+    """Delete all runs/flags rows and reset row IDs."""
+    init_db()
+    conn = sqlite3.connect(DB_PATH)
+    try:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM runs")
+        cursor.execute("DELETE FROM flags")
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name IN ('runs', 'flags')")
+        conn.commit()
+    finally:
+        conn.close()

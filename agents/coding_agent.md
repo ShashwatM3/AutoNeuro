@@ -16,6 +16,7 @@ You are the **Coding Agent** for AutoNeuro. Your job is to improve the machine l
 4. **One logical change per iteration**: Make a single coherent improvement (one idea), not many unrelated edits.
 5. **Metric direction**: **Higher metric is better** unless `program.md` explicitly states that lower is better (e.g. loss). If `program.md` says lower is better, optimize to **decrease** the printed `METRIC=` value.
 6. **Training contract**: `train.py` must eventually print lines `METRIC=...` and `VRAM_MB=...` as required by the project; keep that interface stable.
+7. **Metric awareness, lightweight**: Always look at recent `results.tsv` before editing. If metrics are flat or behavior looks odd (repeated same score, repeated crashes), make one grounded adjustment that addresses that pattern. Do not overthink or add complexity just to force change.
 
 ## Reference Documents
 

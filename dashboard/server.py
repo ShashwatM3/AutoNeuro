@@ -5,8 +5,13 @@ Serves the Runs and Flags pages plus JSON API routes for the same data.
 """
 
 import json
+import os
+import signal
 import sqlite3
+import subprocess
 import sys
+import time
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -28,6 +33,8 @@ load_dotenv(_REPO_ROOT / ".env")
 
 DB_PATH = _REPO_ROOT / "database.db"
 HUMAN_INSTRUCTION_PATH = _REPO_ROOT / "HUMAN_INSTRUCTION.txt"
+ORCHESTRATOR_PID_PATH = _REPO_ROOT / ".orchestrator.pid"
+init_db()
 
 
 def get_db_connection():
@@ -35,6 +42,66 @@ def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row  # This enables dict-like access to rows
     return conn
+
+
+def _rows_to_dicts(rows: list[sqlite3.Row]) -> list[dict[str, Any]]:
+    return [dict(row) for row in rows]
+
+
+def _is_pid_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        return False
+
+
+def _pid_matches_orchestrator(pid: int) -> bool:
+    proc = subprocess.run(
+        ["ps", "-p", str(pid), "-o", "command="],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return False
+    cmd = (proc.stdout or "").strip()
+    return "orchestrator.py" in cmd
+
+
+def _stop_orchestrator_process() -> tuple[bool, str]:
+    if not ORCHESTRATOR_PID_PATH.exists():
+        return False, "No active orchestrator PID file found."
+    raw = ORCHESTRATOR_PID_PATH.read_text(encoding="utf-8").strip()
+    try:
+        pid = int(raw)
+    except ValueError:
+        ORCHESTRATOR_PID_PATH.unlink(missing_ok=True)
+        return False, "Invalid orchestrator PID file removed."
+
+    if not _is_pid_alive(pid):
+        ORCHESTRATOR_PID_PATH.unlink(missing_ok=True)
+        return False, f"Orchestrator PID {pid} not running; removed stale PID file."
+
+    if not _pid_matches_orchestrator(pid):
+        return False, f"PID {pid} does not look like orchestrator.py; refusing to stop."
+
+    os.kill(pid, signal.SIGTERM)
+    deadline = time.time() + 5.0
+    while time.time() < deadline:
+        if not _is_pid_alive(pid):
+            ORCHESTRATOR_PID_PATH.unlink(missing_ok=True)
+            return True, f"Stopped orchestrator PID {pid}."
+        time.sleep(0.1)
+
+    os.kill(pid, signal.SIGKILL)
+    deadline = time.time() + 2.0
+    while time.time() < deadline:
+        if not _is_pid_alive(pid):
+            ORCHESTRATOR_PID_PATH.unlink(missing_ok=True)
+            return True, f"Stopped orchestrator PID {pid} (forced)."
+        time.sleep(0.1)
+
+    return False, f"Failed to stop orchestrator PID {pid}."
 
 
 # Static file serving for HTML pages
@@ -265,6 +332,64 @@ def summarize_flag(flag_id):
             'new_summary': new_summary
         })
         
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/dashboard/exit', methods=['POST'])
+def dashboard_exit():
+    """Export database payload, clear dashboard tables, and stop orchestrator."""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("BEGIN IMMEDIATE")
+
+        cursor.execute(
+            """
+            SELECT id, iteration, commit_hash, status, metric_value, diff, error_log, timestamp
+            FROM runs
+            ORDER BY iteration DESC, id DESC
+            """
+        )
+        runs = _rows_to_dicts(cursor.fetchall())
+
+        cursor.execute(
+            """
+            SELECT id, iteration, trigger_reason, context_summary, human_instruction, resolved, timestamp
+            FROM flags
+            ORDER BY timestamp DESC, id DESC
+            """
+        )
+        flags = _rows_to_dicts(cursor.fetchall())
+
+        exported_at = datetime.now(UTC).isoformat()
+        payload = {
+            "meta": {
+                "exported_at": exported_at,
+                "source": str(DB_PATH),
+                "counts": {"runs": len(runs), "flags": len(flags)},
+            },
+            "runs": runs,
+            "flags": flags,
+        }
+
+        cursor.execute("DELETE FROM runs")
+        cursor.execute("DELETE FROM flags")
+        cursor.execute("DELETE FROM sqlite_sequence WHERE name IN ('runs', 'flags')")
+        conn.commit()
+        conn.close()
+        stopped, stop_msg = _stop_orchestrator_process()
+
+        filename = f"autoneuro-db-export-{exported_at.replace(':', '-').replace('+00:00', 'Z')}.json"
+        return jsonify(
+            {
+                "success": True,
+                "message": f"Database exported/refreshed. {stop_msg}",
+                "filename": filename,
+                "export": payload,
+                "orchestrator_stopped": stopped,
+            }
+        )
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

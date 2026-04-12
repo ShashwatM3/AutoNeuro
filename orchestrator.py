@@ -5,10 +5,12 @@ syncs runs to SQLite for the dashboard, and manages git keep/discard.
 
 from __future__ import annotations
 
+import atexit
 import json
 import math
 import os
 import re
+import signal
 import subprocess
 import time
 from pathlib import Path
@@ -17,7 +19,7 @@ from typing import Any
 from dotenv import load_dotenv
 
 from agents.contact_agent import escalate, write_run_to_db
-from db import init_db
+from db import clear_dashboard_db, init_db
 
 REPO_ROOT = Path(__file__).resolve().parent
 STATE_PATH = REPO_ROOT / "state.json"
@@ -27,6 +29,32 @@ HUMAN_INSTRUCTION_PATH = REPO_ROOT / "HUMAN_INSTRUCTION.txt"
 WRAPPER_SH = REPO_ROOT / "wrapper.sh"
 CODING_AGENT_MD = REPO_ROOT / "agents" / "coding_agent.md"
 PROGRAM_MD = REPO_ROOT / "program.md"
+ORCHESTRATOR_PID_PATH = REPO_ROOT / ".orchestrator.pid"
+
+
+def log(msg: str) -> None:
+    print(f"[orchestrator] {msg}", flush=True)
+
+
+def write_pid_file() -> None:
+    ORCHESTRATOR_PID_PATH.write_text(f"{os.getpid()}\n", encoding="utf-8")
+
+
+def clear_pid_file() -> None:
+    if not ORCHESTRATOR_PID_PATH.exists():
+        return
+    try:
+        raw = ORCHESTRATOR_PID_PATH.read_text(encoding="utf-8").strip()
+        if raw and int(raw) != os.getpid():
+            return
+    except ValueError:
+        pass
+    ORCHESTRATOR_PID_PATH.unlink(missing_ok=True)
+
+
+def _handle_termination(signum: int, _frame: Any) -> None:
+    log(f"received signal={signum}, shutting down")
+    raise SystemExit(0)
 
 
 def load_state() -> dict[str, Any]:
@@ -178,10 +206,18 @@ def _human_suffix(human_instruction: str | None) -> str:
     return ""
 
 
+def has_train_prepare_diff() -> bool:
+    proc = subprocess.run(
+        ["git", "-C", str(REPO_ROOT), "diff", "--quiet", "--", "train.py", "prepare.py"]
+    )
+    return proc.returncode != 0
+
+
 def call_coding_agent(
     mode: str,
     error: str | None = None,
     human_instruction: str | None = None,
+    force_change_note: str | None = None,
 ) -> None:
     from openai import OpenAI
 
@@ -265,6 +301,10 @@ Write the full updated content of whichever file(s) you modify."""
     else:
         raise ValueError(f"Unknown mode: {mode}")
 
+    if force_change_note:
+        user_msg += f"\n\nMANDATORY CHANGE NOTE: {force_change_note}\n"
+
+    log(f"calling coding agent mode={mode}")
     response = client.chat.completions.create(
         model=model,
         max_tokens=8096,
@@ -273,6 +313,7 @@ Write the full updated content of whichever file(s) you modify."""
             {"role": "user", "content": user_msg},
         ],
     )
+    log(f"coding agent response received mode={mode}")
     raw = (response.choices[0].message.content or "").strip()
 
     pattern = re.compile(
@@ -282,7 +323,7 @@ Write the full updated content of whichever file(s) you modify."""
     for match in pattern.finditer(raw):
         fname, content = match.group(1), match.group(2).strip()
         (REPO_ROOT / fname).write_text(content + ("\n" if content and not content.endswith("\n") else ""), encoding="utf-8")
-        print(f"[orchestrator] wrote {fname}")
+        log(f"wrote {fname}")
 
 
 def _run_git(args: list[str]) -> None:
@@ -327,19 +368,53 @@ def sync_latest_run_to_db(state: dict[str, Any], last_row: dict[str, str]) -> No
 
 def main() -> None:
     load_dotenv(REPO_ROOT / ".env")
+    write_pid_file()
+    atexit.register(clear_pid_file)
+    signal.signal(signal.SIGTERM, _handle_termination)
+    signal.signal(signal.SIGINT, _handle_termination)
     init_db()
+    clear_dashboard_db()
+    log("dashboard database cleared for fresh session")
     state = load_state()
 
+    log("startup complete, entering optimization loop")
     while True:
         human_instruction = read_human_instruction_clear()
         rows = parse_results_rows()
         n = len(rows)
         higher = metric_higher_is_better()
+        log(
+            "loop_start "
+            f"iteration={state['iteration']} "
+            f"rows={n} error_counter={state['error_counter']} "
+            f"current_best={state['current_best']}"
+        )
 
         if n == 0:
+            log("mode=FIRST_RUN")
             call_coding_agent("FIRST_RUN", human_instruction=human_instruction)
         elif n == 1:
-            call_coding_agent("SECOND_RUN", human_instruction=human_instruction)
+            log("mode=SECOND_RUN")
+            changed = False
+            for attempt in range(1, 4):
+                note = None
+                if attempt > 1:
+                    note = (
+                        "Previous response made no effective code change in train.py/prepare.py. "
+                        "Make one concrete, minimal code change now."
+                    )
+                call_coding_agent(
+                    "SECOND_RUN",
+                    human_instruction=human_instruction,
+                    force_change_note=note,
+                )
+                if has_train_prepare_diff():
+                    changed = True
+                    break
+                log(f"no_op_agent_edit mode=SECOND_RUN attempt={attempt}")
+            if not changed:
+                log("skipping wrapper: no code diff after retries")
+                continue
         else:
             err_nonempty = (
                 ERROR_PATH.exists()
@@ -348,6 +423,7 @@ def main() -> None:
             if err_nonempty:
                 error_text = ERROR_PATH.read_text(encoding="utf-8", errors="replace")
                 if state["error_counter"] >= 5:
+                    log("mode=ESCALATE(ERROR_LIMIT)")
                     escalate(
                         trigger_reason="ERROR_LIMIT",
                         iteration=state["iteration"],
@@ -360,21 +436,56 @@ def main() -> None:
                     )
                     instr = wait_for_human_instruction(30.0)
                     state["error_counter"] = 0
-                    call_coding_agent(
-                        "FIX_ERROR",
-                        error=error_text,
-                        human_instruction=instr or human_instruction,
-                    )
+                    log("mode=FIX_ERROR(after_human_instruction)")
+                    changed = False
+                    for attempt in range(1, 4):
+                        note = None
+                        if attempt > 1:
+                            note = (
+                                "Previous response made no effective code change in train.py/prepare.py. "
+                                "Apply a concrete error fix now."
+                            )
+                        call_coding_agent(
+                            "FIX_ERROR",
+                            error=error_text,
+                            human_instruction=instr or human_instruction,
+                            force_change_note=note,
+                        )
+                        if has_train_prepare_diff():
+                            changed = True
+                            break
+                        log(f"no_op_agent_edit mode=FIX_ERROR(after_human) attempt={attempt}")
+                    if not changed:
+                        log("skipping wrapper: no code diff after retries")
+                        continue
                 else:
-                    call_coding_agent(
-                        "FIX_ERROR",
-                        error=error_text,
-                        human_instruction=human_instruction,
-                    )
+                    log("mode=FIX_ERROR")
+                    changed = False
+                    for attempt in range(1, 4):
+                        note = None
+                        if attempt > 1:
+                            note = (
+                                "Previous response made no effective code change in train.py/prepare.py. "
+                                "Apply a concrete error fix now."
+                            )
+                        call_coding_agent(
+                            "FIX_ERROR",
+                            error=error_text,
+                            human_instruction=human_instruction,
+                            force_change_note=note,
+                        )
+                        if has_train_prepare_diff():
+                            changed = True
+                            break
+                        log(f"no_op_agent_edit mode=FIX_ERROR attempt={attempt}")
+                    if not changed:
+                        log("skipping wrapper: no code diff after retries")
+                        continue
             else:
                 last = rows[-1]
                 prev = rows[-2]
                 if metric_improved(last["metric"], prev["metric"], higher):
+                    log(f"decision=KEEP last={last['metric']} prev={prev['metric']}")
                     try:
                         git_commit_keep(state["iteration"])
                     except subprocess.CalledProcessError as exc:
@@ -388,18 +499,41 @@ def main() -> None:
                         else:
                             state["current_best"] = min(cb if cb is not None else lm, lm)
                 else:
+                    log(f"decision=DISCARD last={last['metric']} prev={prev['metric']}")
                     try:
                         git_checkout_discard()
                     except subprocess.CalledProcessError as exc:
                         print(f"[orchestrator] git checkout failed: {exc}")
                     update_last_row_status("DISCARD")
-                call_coding_agent("OPTIMIZE", human_instruction=human_instruction)
+                log("mode=OPTIMIZE")
+                changed = False
+                for attempt in range(1, 4):
+                    note = None
+                    if attempt > 1:
+                        note = (
+                            "Previous response made no effective code change in train.py/prepare.py. "
+                            "Make one concrete optimization change now."
+                        )
+                    call_coding_agent(
+                        "OPTIMIZE",
+                        human_instruction=human_instruction,
+                        force_change_note=note,
+                    )
+                    if has_train_prepare_diff():
+                        changed = True
+                        break
+                    log(f"no_op_agent_edit mode=OPTIMIZE attempt={attempt}")
+                if not changed:
+                    log("skipping wrapper: no code diff after retries")
+                    continue
 
+        log("running wrapper.sh")
         subprocess.run(["bash", str(WRAPPER_SH)], cwd=str(REPO_ROOT), check=False)
+        log("wrapper.sh finished")
 
         rows_after = parse_results_rows()
         if not rows_after:
-            print("[orchestrator] WARNING: no data rows in results.tsv after wrapper")
+            log("WARNING: no data rows in results.tsv after wrapper")
         else:
             sync_latest_run_to_db(state, rows_after[-1])
 
@@ -411,7 +545,15 @@ def main() -> None:
 
         state["iteration"] += 1
         save_state(state)
+        log(
+            "loop_end "
+            f"iteration={state['iteration']} "
+            f"error_counter={state['error_counter']}"
+        )
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    finally:
+        clear_pid_file()
