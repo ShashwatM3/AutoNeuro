@@ -5,12 +5,11 @@ Loads the Iris dataset from sklearn, splits into train/val sets,
 and saves as numpy arrays for train.py to consume.
 """
 
-import os
-
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import os
 
 DATA_DIR = ".cache/iris"
 
