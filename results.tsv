@@ -204,3 +204,5 @@ e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	KEEP	[train] Val R² score: 
 1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
 1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.936114	0	KEEP	[train] Val R² score: 0.936114 
 c829836db87a56dd688587bbbca7350d11b24f27	0.938145	0	KEEP	[train] Val R² score: 0.938145 
+d544ce99f9ba42c13ac08b3fefd52cda5c330929	0.437184	0	DISCARD	[train] Val R² score: 0.437184 
+d544ce99f9ba42c13ac08b3fefd52cda5c330929	0.939412	0	KEEP	[train] Val R² score: 0.939412 
