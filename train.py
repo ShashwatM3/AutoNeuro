@@ -3,12 +3,12 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import r2_score
 import os
 
-DATA_DIR = ".cache/iris"  # This path should be updated to reflect the correct dataset
+DATA_DIR = ".cache/diabetes"  # Updated path was reflected correctly
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-N_ESTIMATORS = 200  # Increased from 150 to 200
+N_ESTIMATORS = 200  # Number of boosting stages
 LEARNING_RATE = 0.1  # Step size shrinkage
-MAX_DEPTH = 3  # Maximum depth of individual regression estimators
+MAX_DEPTH = 4  # Increased depth of individual regression estimators
 
 def run_train() -> None:
     # Ensure data exists
