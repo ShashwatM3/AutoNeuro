@@ -1,5 +1,135 @@
 # AutoNeuro
 
+AutoNeuro is a plug-and-play agentic ML optimization playground: you provide an initial experiment baseline, then run the orchestrator loop to iteratively optimize it while monitoring/overriding from the dashboard.
+
+## Quick Start (Run Iris End-to-End)
+
+This repository is currently configured at the root for **Experiment 1 (Iris)** via:
+- `train.py`
+- `prepare.py`
+- `program.md`
+
+### 1) Install dependencies
+
+Use your preferred Python environment, then install project deps:
+
+```bash
+pip install -e .
+```
+
+### 2) Set environment variables
+
+Create a `.env` file at repo root with at least:
+
+```bash
+OPENAI_API_KEY=your_key_here
+# Optional:
+# OPENAI_MODEL=gpt-4o
+```
+
+### 3) Start the optimization loop (terminal 1)
+
+```bash
+python orchestrator.py
+```
+
+This starts the self-optimization cycle:
+- Reads `state.json` + `results.tsv`
+- Calls the coding agent to modify `train.py` / `prepare.py`
+- Executes `bash wrapper.sh`
+- Logs metrics to `results.tsv`
+- Writes runs/flags to `database.db` for the dashboard
+
+### 4) Start the dashboard (terminal 2)
+
+```bash
+python dashboard/server.py
+```
+
+Open:
+- Runs page: [http://localhost:5000](http://localhost:5000)
+- Flags page: [http://localhost:5000/flags](http://localhost:5000/flags)
+
+---
+
+## Plug-and-Play: Bring Your Own Experiment
+
+To define experiment logic, edit these 3 files:
+- `train.py` (model + training loop)
+- `prepare.py` (data loading and preprocessing)
+- `program.md` (goal, metric definition, metric direction, constraints)
+
+Also update experiment dependencies when needed:
+- `pyproject.toml` (`[project].dependencies`) if your new `train.py` / `prepare.py` imports additional libraries (for example `numpy`, `scikit-learn`, `torch`, `pandas`, etc.)
+- Re-run install after dependency changes:
+
+```bash
+pip install -e .
+```
+
+### Crash prevention checklist (required before running orchestrator)
+
+1. Confirm your venv is active (or use explicit venv python path).
+2. Ensure all imports used by `train.py` / `prepare.py` are listed in `pyproject.toml`.
+3. Run `pip install -e .` after any dependency edit.
+4. Sanity check scripts before loop:
+
+```bash
+python prepare.py
+python train.py
+```
+
+If either command fails, fix that first. This prevents repeated CRASH/escalation loops (for example `ModuleNotFoundError: numpy`).
+
+### Required training contract
+
+`train.py` must print:
+
+```python
+print(f"METRIC={metric_value:.6f}", flush=True)
+print(f"VRAM_MB={vram_mb}", flush=True)
+```
+
+`wrapper.sh` parses these lines and appends to `results.tsv`.
+
+### Do not edit for experiment logic
+
+- `wrapper.sh`
+- `evaluate.py`
+- `orchestrator.py`
+- `agents/`
+- `dashboard/`
+
+These are shared infrastructure.
+
+---
+
+## Activating a Different Experiment
+
+Each preset experiment lives under `experiments/`. To activate one, copy its 3 files to the repo root:
+- `train.py`
+- `prepare.py`
+- `program.md`
+
+Example (Iris):
+
+```bash
+cp experiments/experiment1_iris/train.py train.py
+cp experiments/experiment1_iris/prepare.py prepare.py
+cp experiments/experiment1_iris/program.md program.md
+```
+
+Then run:
+
+```bash
+python orchestrator.py
+python dashboard/server.py
+```
+
+Optional: if you want a fresh run history for a new experiment, reset `results.tsv`, `state.json`, and `database.db` first (back them up if needed).
+
+---
+
 ## Code Structure
 
 <a id="code-structure"></a>

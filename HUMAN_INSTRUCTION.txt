@@ -1,1 +1,0 @@
-Try reducing learning rate to 0.001 and add batch normalization to stabilize training

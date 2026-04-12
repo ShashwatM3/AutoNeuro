@@ -42,6 +42,17 @@
             display: flex;
             align-items: stretch;
         }
+        .shell-header__exit {
+            border: 0;
+            border-right: 1px solid var(--border-subtle);
+            background: #e74c3c;
+            color: #fff;
+            font-weight: 600;
+            padding: 0 1rem;
+            cursor: pointer;
+        }
+        .shell-header__exit:hover { background: #c0392b; }
+        .shell-header__exit:disabled { opacity: 0.65; cursor: not-allowed; }
         .shell-header__brand {
             display: flex;
             align-items: center;
@@ -142,6 +153,7 @@
 </head>
 <body>
     <header class="shell-header">
+        <button class="shell-header__exit" id="exitBtn" type="button">Exit</button>
         <div class="shell-header__brand">AutoNeuro <span>Operations</span></div>
         <nav class="shell-nav" aria-label="Primary">
             <a href="/" class="is-active">Runs</a>
@@ -196,6 +208,43 @@
             return 'unknown';
         }
 
+        function downloadJson(filename, data) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        async function handleExitDashboard() {
+            const ok = window.confirm(
+                'Exit dashboard and refresh database?\n\nThis will export all runs/flags to a JSON file and then clear the database tables.'
+            );
+            if (!ok) return;
+
+            const btn = document.getElementById('exitBtn');
+            const oldLabel = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Exiting...';
+            try {
+                const res = await fetch('/api/dashboard/exit', { method: 'POST' });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+                downloadJson(data.filename || 'autoneuro-db-export.json', data.export || {});
+                await fetchRuns();
+                window.alert('Database exported and refreshed.');
+            } catch (e) {
+                window.alert('Exit failed: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = oldLabel;
+            }
+        }
+
         function renderCard(run) {
             const sc = statusClass(run.status);
             const borderMod = sc === 'unknown' ? '' : ' run-card--' + sc;
@@ -241,6 +290,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', startRefresh);
+        document.addEventListener('DOMContentLoaded', function () {
+            const btn = document.getElementById('exitBtn');
+            if (btn) btn.addEventListener('click', handleExitDashboard);
+        });
         document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
                 clearInterval(timer);

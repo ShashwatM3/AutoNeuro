@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "neuro-auto-research"
 version = "0.0.0"
@@ -7,6 +11,11 @@ requires-python = ">=3.10"
 dependencies = [
     "flask",
     "flask-cors",
+    "numpy",
     "openai>=1.0.0",
     "python-dotenv",
+    "scikit-learn",
 ]
+
+[tool.setuptools]
+packages = []

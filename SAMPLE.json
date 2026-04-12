@@ -1,0 +1,333 @@
+{
+  "flags": [],
+  "meta": {
+    "counts": {
+      "flags": 0,
+      "runs": 32
+    },
+    "exported_at": "2026-04-12T11:28:01.307278+00:00",
+    "source": "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/database.db"
+  },
+  "runs": [
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..fa8174a 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n-Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n+Trains an SVM classifier on the Iris dataset with an RBF kernel.\n+Must print METRIC=&lt;float&gt; and VRAM_MB=&lt;int&gt; to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS ---\n+C = 1.0  # Regularization parameter\n+KERNEL = \"rbf\"  # Kernel type to be used in the algorithm\n \n \n def run_train() -> None:\n@@ -33,15 +29,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 32,
+      "iteration": 94,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:57.543705+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..607c434 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,22 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains an SVM classifier on the Iris dataset with an RBF kernel.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS ---\n+C = 1.0  # Regularization parameter\n+KERNEL = \"rbf\"  # Kernel type to be used in the algorithm\n \n \n def run_train() -> None:\n@@ -33,15 +30,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -58,3 +47,4 @@ def main() -> None:\n \n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 31,
+      "iteration": 93,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:27:54.001356+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..2b591b4 100644\n--- a/train.py\n+++ b/train.py\n@@ -7,19 +7,16 @@ METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+C = 1.0                    # Regularization parameter, positive float\n+KERNEL = 'rbf'             # Kernel type: linear | poly | rbf | sigmoid | precomputed\n+GAMMA = 'scale'            # Kernel coefficient for 'rbf', 'poly', and 'sigmoid'\n \n \n def run_train() -> None:\n@@ -33,13 +30,10 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n         random_state=42,\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 30,
+      "iteration": 92,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:50.558301+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..6549947 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a SVC on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# ---- SVC-specific HYPERPARAMETERS ----\n+KERNEL = \"rbf\"               # linear | poly | rbf | sigmoid\n+C = 1.0                     # Regularization parameter\n+GAMMA = \"scale\"             # Kernel coefficient\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +29,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel=KERNEL, C=C, gamma=GAMMA, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +39,8 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()",
+      "error_log": null,
+      "id": 29,
+      "iteration": 91,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:42.512724+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..e13ffa2 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,23 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a SVC on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# ---- SVC-specific HYPERPARAMETERS ----\n+KERNEL = \"rbf\"               # linear | poly | rbf | sigmoid\n+C = 1.0                     # Regularization parameter\n+GAMMA = \"scale\"             # Kernel coefficient\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +30,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel=KERNEL, C=C, gamma=GAMMA, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +40,9 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 28,
+      "iteration": 90,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:27:39.328838+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..7414d43 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,27 +1,18 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n-\n def run_train() -> None:\n     # Ensure data exists\n     if not os.path.exists(f\"{DATA_DIR}/X_train.npy\"):\n@@ -33,15 +24,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel='rbf', gamma='scale', C=1.0, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +34,8 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()",
+      "error_log": null,
+      "id": 27,
+      "iteration": 89,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:35.858616+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..9574d46 100644\n--- a/train.py\n+++ b/train.py\n@@ -18,7 +18,7 @@ HIDDEN_LAYER_SIZES = (64, 32)\n ACTIVATION = \"relu\"          # relu | tanh | logistic\n SOLVER = \"adam\"\n LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n+MAX_ITER = 1000\n ALPHA = 0.0001               # L2 regularisation",
+      "error_log": null,
+      "id": 26,
+      "iteration": 88,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:32.382811+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..d360930 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,18 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +25,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel=\"rbf\", C=1.0, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 25,
+      "iteration": 87,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:27.185473+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..e51b84d 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,19 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +26,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel=\"rbf\", C=1.0, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -58,3 +43,4 @@ def main() -> None:\n \n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 24,
+      "iteration": 86,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:27:23.638986+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..ca85521 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,18 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +25,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel='rbf', C=1.0, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 23,
+      "iteration": 85,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:20.405695+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..b6dea82 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# Parameters for SVC\n+C = 1.0\n+KERNEL = \"rbf\"  # Radial basis function\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +28,8 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    # Using Support Vector Classifier with RBF kernel\n+    model = SVC(C=C, kernel=KERNEL, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 22,
+      "iteration": 84,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:15.963159+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..f342768 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+C = 1.0                    # Regularization parameter\n+KERNEL = \"rbf\"             # rbf | linear | poly | sigmoid\n+GAMMA = \"scale\"            # Kernel coefficient for rbf, poly, and sigmoid\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,13 +29,10 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n         random_state=42,\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 21,
+      "iteration": 83,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:10.612918+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..ae72c08 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier with RBF kernel on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+C = 1.0  # Regularization parameter\n+KERNEL = 'rbf'  # Kernel type\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,14 +28,11 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma='scale',  # default setting for gamma\n+        random_state=42\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 20,
+      "iteration": 82,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:05.889915+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..0a69c6c 100644\n--- a/train.py\n+++ b/train.py\n@@ -7,21 +7,12 @@ METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n-\n def run_train() -> None:\n     # Ensure data exists\n     if not os.path.exists(f\"{DATA_DIR}/X_train.npy\"):\n@@ -33,15 +24,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel='rbf', C=1.0, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 19,
+      "iteration": 81,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:27:00.879165+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..c38c214 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS for SVC (simplified for Iris classification) ---\n+C = 1.0\n+KERNEL = 'rbf'\n+GAMMA = 'scale'\n \n \n def run_train() -> None:\n@@ -33,14 +30,11 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n+        random_state=42\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 18,
+      "iteration": 80,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:52.666656+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..d44e513 100644\n--- a/train.py\n+++ b/train.py\n@@ -7,19 +7,15 @@ METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+C = 1.0  # Regularization parameter\n+KERNEL = 'rbf'  # Kernel type\n \n \n def run_train() -> None:\n@@ -33,15 +29,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 17,
+      "iteration": 79,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:47.941995+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..ea6124b 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+C = 1.0\n+KERNEL = \"rbf\"\n+GAMMA = \"scale\"  # Kernel coefficient for 'rbf', 'poly' and 'sigmoid'\n \n \n def run_train() -> None:\n@@ -33,14 +30,11 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n+        random_state=42\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 16,
+      "iteration": 78,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:44.053561+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..5c5064e 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,18 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains an SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +25,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(kernel='rbf', C=1.0, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 15,
+      "iteration": 77,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:39.219063+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..7f45d8a 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# --- HYPERPARAMETERS (Agent may tune these) ---\n+C = 1.0                   # Regularization parameter\n+KERNEL = 'rbf'            # Specifies the kernel type to be used in the algorithm\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +28,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +38,8 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()",
+      "error_log": null,
+      "id": 14,
+      "iteration": 76,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:34.611904+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..d4fe4e3 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,22 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# --- HYPERPARAMETERS (Agent may tune these) ---\n+C = 1.0                   # Regularization parameter\n+KERNEL = 'rbf'            # Specifies the kernel type to be used in the algorithm\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +29,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +39,9 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 13,
+      "iteration": 75,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:26:31.436024+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..6a66130 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS ---\n+C = 1.0  # Regularization parameter\n+KERNEL = 'rbf'  # Kernel type\n \n \n def run_train() -> None:\n@@ -33,15 +29,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 12,
+      "iteration": 74,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:27.526559+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..f063740 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,13 @@\n-\"\"\"\n-Model architecture and training loop for Iris Classification.\n-\n-Trains a simple MLP classifier on the Iris dataset.\n-Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n-METRIC = validation accuracy (higher is better, range 0.0-1.0).\n-\"\"\"\n-\n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+# --- HYPERPARAMETERS (for future tuning) ---\n+C = 1.0\n+KERNEL = \"rbf\"  # linear | poly | rbf | sigmoid\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +20,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 11,
+      "iteration": 73,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:23.042645+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..9a7a234 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+KERNEL = \"rbf\"  # rbf | linear | poly | sigmoid\n+C = 1.0         # Regularization parameter\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -29,19 +24,11 @@ def run_train() -> None:\n         prepare.run_prepare()\n \n     X_train = np.load(f\"{DATA_DIR}/X_train.npy\")\n-    X_val   = np.load(f\"{DATA_DIR}/X_val.npy\")\n+    X_val = np.load(f\"{DATA_DIR}/X_val.npy\")\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n-    y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n-\n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    y_val = np.load(f\"{DATA_DIR}/y_val.npy\")\n+\n+    model = SVC(kernel=KERNEL, C=C, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +38,8 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()",
+      "error_log": null,
+      "id": 10,
+      "iteration": 72,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:18.653225+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..79db7a1 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,22 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+KERNEL = \"rbf\"  # rbf | linear | poly | sigmoid\n+C = 1.0         # Regularization parameter\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -29,19 +25,11 @@ def run_train() -> None:\n         prepare.run_prepare()\n \n     X_train = np.load(f\"{DATA_DIR}/X_train.npy\")\n-    X_val   = np.load(f\"{DATA_DIR}/X_val.npy\")\n+    X_val = np.load(f\"{DATA_DIR}/X_val.npy\")\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n-    y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n-\n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    y_val = np.load(f\"{DATA_DIR}/y_val.npy\")\n+\n+    model = SVC(kernel=KERNEL, C=C, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)\n@@ -51,10 +39,9 @@ def run_train() -> None:\n     print(f\"METRIC={accuracy:.6f}\", flush=True)\n     print(f\"VRAM_MB=0\", flush=True)\n \n-\n def main() -> None:\n     run_train()\n \n-\n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 9,
+      "iteration": 71,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:26:15.242384+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..69fa98a 100644\n--- a/train.py\n+++ b/train.py\n@@ -14,7 +14,7 @@ import os\n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n+HIDDEN_LAYER_SIZES = (64, 32, 16)  # Increased complexity with an additional layer\n ACTIVATION = \"relu\"          # relu | tanh | logistic\n SOLVER = \"adam\"\n LEARNING_RATE_INIT = 0.001",
+      "error_log": null,
+      "id": 8,
+      "iteration": 70,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:11.931226+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..64f5c78 100644\n--- a/train.py\n+++ b/train.py\n@@ -7,19 +7,16 @@ METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+C = 1.0\n+KERNEL = \"rbf\"  # rbf | linear | poly | sigmoid\n+GAMMA = \"scale\"  # scale | auto\n \n \n def run_train() -> None:\n@@ -33,13 +30,10 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n         random_state=42,\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 7,
+      "iteration": 69,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:26:07.209024+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..04ef874 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains an SVC classifier with RBF kernel on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+C = 1.0\n+KERNEL = 'rbf'  # rbf is default\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,15 +28,7 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n-    )\n+    model = SVC(C=C, kernel=KERNEL, gamma='scale', random_state=42)\n     model.fit(X_train, y_train)\n \n     y_pred = model.predict(X_val)",
+      "error_log": null,
+      "id": 6,
+      "iteration": 68,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:25:55.936416+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..fb3a88d 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+C = 1.0                     # Regularization parameter\n+KERNEL = \"rbf\"              # Kernel type: linear, poly, rbf, sigmoid\n+GAMMA = \"scale\"             # Kernel coefficient\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,14 +29,11 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n+        random_state=42\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 5,
+      "iteration": 67,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:25:51.053359+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..42b818b 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,26 +1,23 @@\n+```python\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVC classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n-\n+C = 1.0                     # Regularization parameter\n+KERNEL = \"rbf\"              # Kernel type: linear, poly, rbf, sigmoid\n+GAMMA = \"scale\"             # Kernel coefficient\n \n def run_train() -> None:\n     # Ensure data exists\n@@ -33,14 +30,11 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n-        random_state=42,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n+        random_state=42\n     )\n     model.fit(X_train, y_train)\n \n@@ -58,3 +52,4 @@ def main() -> None:\n \n if __name__ == \"__main__\":\n     main()\n+```",
+      "error_log": "  File \"/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py\", line 1\n    ```python\n    ^\nSyntaxError: invalid syntax\n",
+      "id": 4,
+      "iteration": 66,
+      "metric_value": null,
+      "status": "CRASH",
+      "timestamp": "2026-04-12T11:25:46.867584+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..e36f782 100644\n--- a/train.py\n+++ b/train.py\n@@ -15,7 +15,7 @@ DATA_DIR = \".cache/iris\"\n \n # --- HYPERPARAMETERS (agent may tune these) ---\n HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n+ACTIVATION = \"tanh\"          # relu | tanh | logistic\n SOLVER = \"adam\"\n LEARNING_RATE_INIT = 0.001\n MAX_ITER = 500",
+      "error_log": null,
+      "id": 3,
+      "iteration": 65,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:25:38.731860+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..6403af4 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,22 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple classifier on the Iris dataset.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS ---\n+C = 1.0\n+KERNEL = 'rbf'\n+GAMMA = 'scale'\n \n \n def run_train() -> None:\n@@ -33,13 +30,10 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma=GAMMA,\n         random_state=42,\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 2,
+      "iteration": 64,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:25:33.283694+00:00"
+    },
+    {
+      "commit_hash": "7ae7944b2570a844d0a650561783217be0679349",
+      "diff": "diff --git a/train.py b/train.py\nindex d82d6f2..351f3b7 100644\n--- a/train.py\n+++ b/train.py\n@@ -1,25 +1,21 @@\n \"\"\"\n Model architecture and training loop for Iris Classification.\n \n-Trains a simple MLP classifier on the Iris dataset.\n+Trains a simple SVM classifier on the Iris dataset with RBF kernel.\n Must print METRIC=<float> and VRAM_MB=<int> to stdout at end.\n METRIC = validation accuracy (higher is better, range 0.0-1.0).\n \"\"\"\n \n import numpy as np\n-from sklearn.neural_network import MLPClassifier\n+from sklearn.svm import SVC\n from sklearn.metrics import accuracy_score\n import os\n \n DATA_DIR = \".cache/iris\"\n \n-# --- HYPERPARAMETERS (agent may tune these) ---\n-HIDDEN_LAYER_SIZES = (64, 32)\n-ACTIVATION = \"relu\"          # relu | tanh | logistic\n-SOLVER = \"adam\"\n-LEARNING_RATE_INIT = 0.001\n-MAX_ITER = 500\n-ALPHA = 0.0001               # L2 regularisation\n+# --- HYPERPARAMETERS (agent may tune these for SVC) ---\n+C = 1.0                      # Regularization parameter\n+KERNEL = \"rbf\"              # Kernel type to be used in the algorithm\n \n \n def run_train() -> None:\n@@ -33,13 +29,10 @@ def run_train() -> None:\n     y_train = np.load(f\"{DATA_DIR}/y_train.npy\")\n     y_val   = np.load(f\"{DATA_DIR}/y_val.npy\")\n \n-    model = MLPClassifier(\n-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,\n-        activation=ACTIVATION,\n-        solver=SOLVER,\n-        learning_rate_init=LEARNING_RATE_INIT,\n-        max_iter=MAX_ITER,\n-        alpha=ALPHA,\n+    model = SVC(\n+        C=C,\n+        kernel=KERNEL,\n+        gamma='auto',   # Changed to auto for simplicity to avoid re-tuning\n         random_state=42,\n     )\n     model.fit(X_train, y_train)",
+      "error_log": null,
+      "id": 1,
+      "iteration": 63,
+      "metric_value": 0.966667,
+      "status": "KEEP",
+      "timestamp": "2026-04-12T11:25:27.170428+00:00"
+    }
+  ]
+}

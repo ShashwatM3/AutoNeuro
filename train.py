@@ -1,21 +1,37 @@
-"""
-Core model definition and training loop.
+import numpy as np
+from sklearn.linear_model import Ridge
+from sklearn.metrics import r2_score
+import os
 
-Training logic, optimization, and checkpointing will live here.
+DATA_DIR = ".cache/diabetes"
 
-Prints METRIC= and VRAM_MB= lines for wrapper.sh to append to results.tsv.
-"""
-
+# --- HYPERPARAMETERS (agent may tune these) ---
+ALPHA = 1.0  # Regularization strength
 
 def run_train() -> None:
-    print("train stub", flush=True)
-    print("METRIC=0.0", flush=True)
-    print("VRAM_MB=0", flush=True)
+    # Ensure data exists
+    if not os.path.exists(f"{DATA_DIR}/X_train.npy"):
+        import prepare
+        prepare.run_prepare()
 
+    X_train = np.load(f"{DATA_DIR}/X_train.npy")
+    X_val   = np.load(f"{DATA_DIR}/X_val.npy")
+    y_train = np.load(f"{DATA_DIR}/y_train.npy")
+    y_val   = np.load(f"{DATA_DIR}/y_val.npy")
+
+    # Create and train the Ridge regression model
+    model = Ridge(alpha=ALPHA)
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_val)
+    r2 = r2_score(y_val, y_pred)
+
+    print(f"[train] Val R² score: {r2:.6f}")
+    print(f"METRIC={r2:.6f}", flush=True)
+    print(f"VRAM_MB=0", flush=True)
 
 def main() -> None:
     run_train()
-
 
 if __name__ == "__main__":
     main()

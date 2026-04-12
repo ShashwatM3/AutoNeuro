@@ -1,2 +1,243 @@
 commit_hash	metric	vram	status	description
 6669f2319c21faabfcfce6cac61d25815e725776	0.0	0	KEEP	train stub 
+34518cbd26b28b543e6893c37036e867e0e5b1e9	0.966667	0	KEEP	[prepare] Train: (120, 4), Val: (30, 4) 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 2, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 4, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' Th
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 4, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' Th
+200c233036b1f251764737f696385186b3f31aeb	nan	0	DISCARD	train.py failed
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 11, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ``` ^ SyntaxError: invalid syntax 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.900000	0	DISCARD	[train] Val accuracy: 0.9000 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+685c45b5db550f8ed39ad8c059a4005dd3983ad1	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+685c45b5db550f8ed39ad8c059a4005dd3983ad1	0.933333	0	DISCARD	[train] Val accuracy: 0.9333 
+685c45b5db550f8ed39ad8c059a4005dd3983ad1	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.933333	0	DISCARD	[train] Val accuracy: 0.9333 
+d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ``` ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ``` ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+7ae7944b2570a844d0a650561783217be0679349	0.933333	0	DISCARD	[train] Val accuracy: 0.9333 
+7ae7944b2570a844d0a650561783217be0679349	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.933333	0	DISCARD	[train] Val accuracy: 0.9333 
+4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.435004	0	DISCARD	[prepare] Train: (353, 10), Val: (89, 10) 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.919422	0	DISCARD	[train] Val R² score: 0.919422 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.452979	0	DISCARD	[train] Val R² Score: 0.452979 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	KEEP	[train] Val R² score: 0.936114 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
+1df97b5d1fb77d33a2849e73a14b3274af3f67bd	0.936114	0	KEEP	[train] Val R² score: 0.936114 
+c829836db87a56dd688587bbbca7350d11b24f27	0.938145	0	KEEP	[train] Val R² score: 0.938145 
+d544ce99f9ba42c13ac08b3fefd52cda5c330929	0.437184	0	DISCARD	[train] Val R² score: 0.437184 
+d544ce99f9ba42c13ac08b3fefd52cda5c330929	0.939412	0	KEEP	[train] Val R² score: 0.939412 
+09df7a40da71d6168b5981239323290f63a12438	0.410051	0	DISCARD	[train] Val R² score: 0.410051 
+09df7a40da71d6168b5981239323290f63a12438	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+09df7a40da71d6168b5981239323290f63a12438	0.454147	0	DISCARD	[train] Val R² score: 0.454147 
+09df7a40da71d6168b5981239323290f63a12438	0.360834	0	DISCARD	[train] Val R² score: 0.360834 
+09df7a40da71d6168b5981239323290f63a12438	0.410035	0	KEEP	[train] Val R² score: 0.410035 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.388067	0	DISCARD	[train] Val R² score: 0.388067 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.437184	0	DISCARD	[train] Val R² score: 0.437184 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.388067	0	DISCARD	[train] Val R² score: 0.388067 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.360834	0	DISCARD	[train] Val R² score: 0.360834 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.378395	0	DISCARD	[train] Val R² score: 0.378395 
+c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.410035	0	KEEP	[train] Val R² score: 0.410035 
+8ac0923cae02d6b16bd119abb946f0c036072a40	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+8ac0923cae02d6b16bd119abb946f0c036072a40	0.437184	0	DISCARD	[train] Val R² score: 0.437184 
+8ac0923cae02d6b16bd119abb946f0c036072a40	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+8ac0923cae02d6b16bd119abb946f0c036072a40	0.385559	0	DISCARD	[train] Val R² score: 0.385559 
+8ac0923cae02d6b16bd119abb946f0c036072a40	0.410035	0	KEEP	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.454147	0	DISCARD	[train] Val R² score: 0.454147 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.350063	0	DISCARD	[train] Val R² score: 0.350063 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.388067	0	KEEP	[train] Val R² score: 0.388067 
+45da2d577b6e00409da0e1d09d0d087bd1366dd1	0.454147	0	KEEP	[train] Val R² score: 0.454147 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	0.451445	0	DISCARD	[train] Val R² score: 0.451445 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
+fcce0f2e89b115b3342c987d1542ab488e4b07be	0.452979	0	DISCARD	[train] Val R² score: 0.452979 
