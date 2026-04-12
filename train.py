@@ -11,16 +11,14 @@ import os
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
 
 DATA_DIR = ".cache/iris"
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-HIDDEN_LAYER_SIZES = (64, 32)
-ACTIVATION = "relu"  # relu | tanh | logistic
-SOLVER = "adam"
-LEARNING_RATE_INIT = 0.001
-MAX_ITER = 500
-ALPHA = 0.0001  # L2 regularisation
+SVC_KERNEL = 'rbf'  # Linear kernel didn't reach the performance target
+SVC_C = 1.0  # Regularization parameter
+SVC_GAMMA = 'scale'  # Kernel coefficient
 
 
 def run_train() -> None:
@@ -35,15 +33,7 @@ def run_train() -> None:
     y_train = np.load(f"{DATA_DIR}/y_train.npy")
     y_val = np.load(f"{DATA_DIR}/y_val.npy")
 
-    model = MLPClassifier(
-        hidden_layer_sizes=HIDDEN_LAYER_SIZES,
-        activation=ACTIVATION,
-        solver=SOLVER,
-        learning_rate_init=LEARNING_RATE_INIT,
-        max_iter=MAX_ITER,
-        alpha=ALPHA,
-        random_state=42,
-    )
+    model = SVC(kernel=SVC_KERNEL, C=SVC_C, gamma=SVC_GAMMA, random_state=42)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_val)

@@ -1,3 +1,53 @@
 commit_hash	metric	vram	status	description
 6669f2319c21faabfcfce6cac61d25815e725776	0.0	0	KEEP	train stub 
 34518cbd26b28b543e6893c37036e867e0e5b1e9	0.966667	0	KEEP	[prepare] Train: (120, 4), Val: (30, 4) 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 2, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 4, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' Th
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 4, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' Th
+200c233036b1f251764737f696385186b3f31aeb	nan	0	DISCARD	train.py failed
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	Traceback (most recent call last): File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 11, in <module> import numpy as np ModuleNotFoundError: No module named 'numpy' 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ``` ^ SyntaxError: invalid syntax 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+200c233036b1f251764737f696385186b3f31aeb	0.900000	0	DISCARD	[train] Val accuracy: 0.9000 
+200c233036b1f251764737f696385186b3f31aeb	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
