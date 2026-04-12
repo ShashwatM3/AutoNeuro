@@ -1,3 +1,4 @@
+```python
 import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
@@ -6,7 +7,6 @@ import os
 
 DATA_DIR = ".cache/diabetes"  # Changed path to reflect the appropriate dataset
 
-
 def run_prepare() -> None:
     os.makedirs(DATA_DIR, exist_ok=True)
 
@@ -14,7 +14,7 @@ def run_prepare() -> None:
     X, y = diabetes.data, diabetes.target  # (442, 10), (442,)
 
     # Introduce polynomial features
-    poly = PolynomialFeatures(degree=2, include_bias=False)
+    poly = PolynomialFeatures(degree=2, include_bias=False)  # Using degree=2 for interaction terms
     X = poly.fit_transform(X)
 
     X_train, X_val, y_train, y_val = train_test_split(
@@ -32,6 +32,6 @@ def run_prepare() -> None:
 
     print(f"[prepare] Train: {X_train.shape}, Val: {X_val.shape}")
 
-
 if __name__ == "__main__":
     run_prepare()
+```
