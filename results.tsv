@@ -179,3 +179,21 @@ d4d70e8eda08418c0410e7e05040731afbe6f025	0.966667	0	KEEP	[train] Val accuracy: 0
 4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
 4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.933333	0	DISCARD	[train] Val accuracy: 0.9333 
 4b08df4cce79c5208b5fb729cd1a2f9454009ab3	0.966667	0	KEEP	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.966667	0	DISCARD	[train] Val accuracy: 0.9667 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.435004	0	DISCARD	[prepare] Train: (353, 10), Val: (89, 10) 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.9361 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	DISCARD	[train] Val R² score: 0.936114 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.919422	0	DISCARD	[train] Val R² score: 0.919422 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.452979	0	DISCARD	[train] Val R² Score: 0.452979 
+e72dfa3d6eb1dda3ee60c82941fb5c62a10fd115	0.936114	0	KEEP	[train] Val R² score: 0.936114 
