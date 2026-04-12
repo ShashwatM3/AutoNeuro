@@ -226,3 +226,10 @@ c15ae67dd97c53b8c4f5a2af4bb435b0b2712869	0.410035	0	KEEP	[train] Val R² score: 
 8ac0923cae02d6b16bd119abb946f0c036072a40	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
 8ac0923cae02d6b16bd119abb946f0c036072a40	0.385559	0	DISCARD	[train] Val R² score: 0.385559 
 8ac0923cae02d6b16bd119abb946f0c036072a40	0.410035	0	KEEP	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.410035	0	DISCARD	[train] Val R² score: 0.410035 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	nan	0	CRASH	 File "/Users/gobus/Desktop/main/projects/NEUROHACK/AutoNeuro/train.py", line 1 ```python ^ SyntaxError: invalid syntax 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.454147	0	DISCARD	[train] Val R² score: 0.454147 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.350063	0	DISCARD	[train] Val R² score: 0.350063 
+ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.388067	0	KEEP	[train] Val R² score: 0.388067 

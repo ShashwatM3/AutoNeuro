@@ -6,9 +6,9 @@ import os
 DATA_DIR = ".cache/diabetes"  # Updated path was reflected correctly
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-N_ESTIMATORS = 200  # Number of boosting stages
+N_ESTIMATORS = 300  # Increased number of boosting stages
 LEARNING_RATE = 0.1  # Step size shrinkage
-MAX_DEPTH = 4  # Increased depth of individual regression estimators
+MAX_DEPTH = 4  # Depth of individual regression estimators
 
 def run_train() -> None:
     # Ensure data exists
