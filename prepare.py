@@ -1,27 +1,24 @@
-"""
-Data loading and preprocessing for Iris Classification.
-
-Loads the Iris dataset from sklearn, splits into train/val sets,
-and saves as numpy arrays for train.py to consume.
-"""
-
 import numpy as np
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 import os
 
-DATA_DIR = ".cache/iris"
+DATA_DIR = ".cache/diabetes"  # Changed path to reflect the appropriate dataset
 
 
 def run_prepare() -> None:
     os.makedirs(DATA_DIR, exist_ok=True)
 
-    iris = load_iris()
-    X, y = iris.data, iris.target  # (150, 4), (150,)
+    diabetes = load_diabetes()
+    X, y = diabetes.data, diabetes.target  # (442, 10), (442,)
+
+    # Introduce polynomial features
+    poly = PolynomialFeatures(degree=2, include_bias=False)
+    X = poly.fit_transform(X)
 
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X, y, test_size=0.2, random_state=42
     )
 
     scaler = StandardScaler()
@@ -34,7 +31,6 @@ def run_prepare() -> None:
     np.save(f"{DATA_DIR}/y_val.npy", y_val)
 
     print(f"[prepare] Train: {X_train.shape}, Val: {X_val.shape}")
-    print(f"[prepare] Classes: {iris.target_names.tolist()}")
 
 
 if __name__ == "__main__":
