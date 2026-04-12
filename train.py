@@ -6,7 +6,7 @@ import os
 DATA_DIR = ".cache/iris"  # This path should be updated to reflect the correct dataset
 
 # --- HYPERPARAMETERS (agent may tune these) ---
-N_ESTIMATORS = 100  # Number of boosting stages
+N_ESTIMATORS = 150  # Increased number of boosting stages
 LEARNING_RATE = 0.1  # Step size shrinkage
 MAX_DEPTH = 3  # Maximum depth of individual regression estimators
 
