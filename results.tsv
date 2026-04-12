@@ -233,3 +233,4 @@ ad0cded3da28c01eba3cdc4b901cd37e58650ef8	nan	0	CRASH	 File "/Users/gobus/Desktop
 ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.454147	0	DISCARD	[train] Val R² score: 0.454147 
 ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.350063	0	DISCARD	[train] Val R² score: 0.350063 
 ad0cded3da28c01eba3cdc4b901cd37e58650ef8	0.388067	0	KEEP	[train] Val R² score: 0.388067 
+45da2d577b6e00409da0e1d09d0d087bd1366dd1	0.454147	0	KEEP	[train] Val R² score: 0.454147 

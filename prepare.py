@@ -1,11 +1,10 @@
-```python
 import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 import os
 
-DATA_DIR = ".cache/diabetes"  # Changed path to reflect the appropriate dataset
+DATA_DIR = ".cache/diabetes"
 
 def run_prepare() -> None:
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -13,12 +12,12 @@ def run_prepare() -> None:
     diabetes = load_diabetes()
     X, y = diabetes.data, diabetes.target  # (442, 10), (442,)
 
-    # No polynomial features
-    # Keep the features as originally provided by the dataset
-    # i.e., do not introduce polynomial features right now
-
+    # Enable polynomial features
+    poly = PolynomialFeatures(degree=2, include_bias=False)
+    X_poly = poly.fit_transform(X)
+    
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X_poly, y, test_size=0.2, random_state=42
     )
 
     scaler = StandardScaler()
@@ -34,4 +33,3 @@ def run_prepare() -> None:
 
 if __name__ == "__main__":
     run_prepare()
-```
